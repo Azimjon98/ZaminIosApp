@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>298247931918-hk0kkajpf4sqtdeuukrhg16kcceehi77.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.298247931918-hk0kkajpf4sqtdeuukrhg16kcceehi77</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>298247931918-s5q261p7a8hhref70un3vkcdj9aq1kn6.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAGmi_L3GBy1X_5Zd-RhnboncGnkww7x9o</string>
+	<key>GCM_SENDER_ID</key>
+	<string>298247931918</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>edu.azimjon.ios.project.zamin</string>
+	<key>PROJECT_ID</key>
+	<string>zamin-7b1da</string>
+	<key>STORAGE_BUCKET</key>
+	<string>zamin-7b1da.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:298247931918:ios:74d0ae45a7023481</string>
+	<key>DATABASE_URL</key>
+	<string>https://zamin-7b1da.firebaseio.com</string>
+</dict>
+</plist>

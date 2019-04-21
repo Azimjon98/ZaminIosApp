@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="151" id="KGk-i7-Jjw" customClass="CategoriesCollectionCell" customModule="zamin" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="151"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="150.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dwI-Wo-gdU" userLabel="baseLay">
+                        <rect key="frame" x="10" y="10" width="104" height="48"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo_2018-05-08_20-49-44" translatesAutoresizingMaskIntoConstraints="NO" id="ad3-0G-lBc">
+                                <rect key="frame" x="0.0" y="0.0" width="104" height="48"/>
+                            </imageView>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZQT-iq-YXi">
+                                <rect key="frame" x="0.0" y="0.0" width="104" height="48"/>
+                                <color key="backgroundColor" red="0.82745098039215681" green="0.18431372549019609" blue="0.18431372549019609" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="displayP3"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ўзбекистон" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IDk-4c-XnU">
+                                <rect key="frame" x="10" y="24" width="94" height="16"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="16" id="acb-dd-bIB"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.57810515169999999" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="ZQT-iq-YXi" firstAttribute="top" secondItem="dwI-Wo-gdU" secondAttribute="top" id="34u-Ny-fHN"/>
+                            <constraint firstAttribute="trailing" secondItem="ad3-0G-lBc" secondAttribute="trailing" id="7zI-qo-51A"/>
+                            <constraint firstAttribute="bottom" secondItem="ZQT-iq-YXi" secondAttribute="bottom" id="P8H-02-UDz"/>
+                            <constraint firstItem="IDk-4c-XnU" firstAttribute="leading" secondItem="dwI-Wo-gdU" secondAttribute="leading" constant="10" id="Pbz-B1-IZ9"/>
+                            <constraint firstAttribute="trailing" secondItem="IDk-4c-XnU" secondAttribute="trailing" id="XK9-44-FpO"/>
+                            <constraint firstItem="ad3-0G-lBc" firstAttribute="leading" secondItem="dwI-Wo-gdU" secondAttribute="leading" id="dQU-I8-rHN"/>
+                            <constraint firstAttribute="width" constant="104" id="eED-2J-Bz6"/>
+                            <constraint firstAttribute="trailing" secondItem="ZQT-iq-YXi" secondAttribute="trailing" id="iDl-6h-5JS"/>
+                            <constraint firstItem="ZQT-iq-YXi" firstAttribute="leading" secondItem="dwI-Wo-gdU" secondAttribute="leading" id="pJ3-c0-fsI"/>
+                            <constraint firstAttribute="height" constant="48" id="sHO-K1-xlr"/>
+                            <constraint firstAttribute="bottom" secondItem="IDk-4c-XnU" secondAttribute="bottom" constant="8" id="whC-5b-yYs"/>
+                            <constraint firstAttribute="bottom" secondItem="ad3-0G-lBc" secondAttribute="bottom" id="xaz-4F-9mv"/>
+                            <constraint firstItem="ad3-0G-lBc" firstAttribute="top" secondItem="dwI-Wo-gdU" secondAttribute="top" id="zgd-9l-XCD"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="6"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                <constraints>
+                    <constraint firstItem="dwI-Wo-gdU" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="nGf-BA-4yv"/>
+                    <constraint firstItem="dwI-Wo-gdU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="uQ1-Pn-8tW"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <point key="canvasLocation" x="85.507246376811594" y="169.75446428571428"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="photo_2018-05-08_20-49-44" width="720" height="1280"/>
+    </resources>
+</document>
