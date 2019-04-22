@@ -10,10 +10,16 @@ import UIKit
 
 class FavouriteNewsVC: UIViewController {
 
+    @IBOutlet weak var appBar: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        appBar.layer.shadowRadius = 5
+        appBar.layer.shadowOpacity = 0.1
+        appBar.layer.shadowOffset = CGSize(width: 0, height: 1)
+        appBar.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
     }
     
 

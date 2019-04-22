@@ -10,9 +10,15 @@ import UIKit
 
 class GalleryNewsCell: UITableViewCell {
 
+    @IBOutlet weak var photoSet: UIStackView!
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+
+        photoSet.layer.cornerRadius = 6
+        photoSet.layer.masksToBounds = true
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

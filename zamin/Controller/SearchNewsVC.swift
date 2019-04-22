@@ -1,14 +1,14 @@
 //
-//  NewsFeedVC.swift
+//  SearchNewsVC.swift
 //  zamin
 //
-//  Created by Azimjon Nu'monov on 4/21/19.
+//  Created by Azimjon Nu'monov on 4/22/19.
 //  Copyright © 2019 Azimjon Nu'monov. All rights reserved.
 //
 
 import UIKit
 
-class NewsFeedVC: UIViewController {
+class SearchNewsVC: UIViewController {
 
     @IBOutlet weak var appBar: UIView!
     override func viewDidLoad() {
@@ -19,7 +19,6 @@ class NewsFeedVC: UIViewController {
         appBar.layer.shadowOpacity = 0.1
         appBar.layer.shadowOffset = CGSize(width: 0, height: 1)
         appBar.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
-
     }
     
 

@@ -53,6 +53,7 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - PagingMenuController (2.2.0)
   - SVProgressHUD (2.2.5)
   - SwiftyJSON (5.0.0)
 
@@ -61,6 +62,7 @@ DEPENDENCIES:
   - Crashlytics (~> 3.10.1)
   - Fabric (~> 1.7.5)
   - Firebase/Core
+  - PagingMenuController
   - SVProgressHUD
   - SwiftyJSON
 
@@ -76,6 +78,7 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - nanopb
+    - PagingMenuController
     - SVProgressHUD
     - SwiftyJSON
 
@@ -90,9 +93,10 @@ SPEC CHECKSUMS:
   GoogleAppMeasurement: ffe513e90551844a739e7bcbb1d2aca1c28a4338
   GoogleUtilities: 273e67030e0de313e7304f6dcfa96fc5214f6c23
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  PagingMenuController: 6176618987bb170096664f2da097313e45ed9c31
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
 
-PODFILE CHECKSUM: c791e518dd480488339b2d2e831142e0846e13be
+PODFILE CHECKSUM: 36554bb4c3edd9a01b2cddd4aca62adda8ac89fc
 
 COCOAPODS: 1.6.1

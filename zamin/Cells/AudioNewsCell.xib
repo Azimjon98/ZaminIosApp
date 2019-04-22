@@ -12,165 +12,88 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="307" id="KGk-i7-Jjw" customClass="AudioNewsCell" customModule="zamin" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="379" height="307"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="audioNewsCell" rowHeight="141" id="KGk-i7-Jjw" customClass="AudioNewsCell" customModule="zamin" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="394" height="141"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="379" height="306.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="394" height="140.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mWj-Uj-9hQ" userLabel="baseView">
-                        <rect key="frame" x="15" y="15" width="349" height="300"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="top" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="ZXr-0U-h2C" userLabel="titleStack">
+                        <rect key="frame" x="15" y="15" width="364" height="70.5"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="zez-9B-1Nb">
-                                <rect key="frame" x="0.0" y="0.0" width="349" height="127"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="ZXr-0U-h2C" userLabel="titleStack">
-                                        <rect key="frame" x="0.0" y="0.0" width="349" height="72"/>
-                                        <subviews>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="music_icon_inactive" translatesAutoresizingMaskIntoConstraints="NO" id="TJf-1W-fbq">
-                                                <rect key="frame" x="0.0" y="16" width="40" height="40"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="40" id="1e2-1l-OE6"/>
-                                                    <constraint firstAttribute="height" constant="40" id="vQ2-qP-H2s"/>
-                                                </constraints>
-                                            </imageView>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nTX-3n-hkU" userLabel="titleLay">
-                                                <rect key="frame" x="55" y="2.5" width="294" height="67.5"/>
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bte-Z2-uaq">
-                                                        <rect key="frame" x="0.0" y="0.0" width="294" height="67.5"/>
-                                                        <attributedString key="attributedText">
-                                                            <fragment content="Миллионерлардан 10 та маслаҳат: молиявий одатларни соғломлаштири">
-                                                                <attributes>
-                                                                    <color key="NSColor" red="0.33300000000000002" green="0.30199999999999999" blue="0.33700000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                    <font key="NSFont" size="17" name="HelveticaNeue"/>
-                                                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
-                                                                        <tabStops>
-                                                                            <textTab alignment="left" location="28">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="56">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="84">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="112">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="140">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="168">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="196">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="224">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="252">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="280">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="308">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                            <textTab alignment="left" location="336">
-                                                                                <options/>
-                                                                            </textTab>
-                                                                        </tabStops>
-                                                                    </paragraphStyle>
-                                                                </attributes>
-                                                            </fragment>
-                                                        </attributedString>
-                                                        <nil key="highlightedColor"/>
-                                                        <size key="shadowOffset" width="1" height="1"/>
-                                                    </label>
-                                                </subviews>
-                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <constraints>
-                                                    <constraint firstItem="bte-Z2-uaq" firstAttribute="top" secondItem="nTX-3n-hkU" secondAttribute="top" id="6QA-k3-94N"/>
-                                                    <constraint firstItem="bte-Z2-uaq" firstAttribute="leading" secondItem="nTX-3n-hkU" secondAttribute="leading" id="7oq-24-YPi"/>
-                                                    <constraint firstAttribute="trailing" secondItem="bte-Z2-uaq" secondAttribute="trailing" id="OmD-eA-aEa"/>
-                                                    <constraint firstAttribute="bottom" secondItem="bte-Z2-uaq" secondAttribute="bottom" id="s7M-Nc-XgM"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="72" id="L9f-cI-OoM"/>
-                                        </constraints>
-                                    </stackView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="otV-ce-Dtp" userLabel="additionalView">
-                                        <rect key="frame" x="55" y="87" width="239" height="24"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9:05 • 19 март 2019 • " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQ7-x3-vKB">
-                                                <rect key="frame" x="0.0" y="0.0" width="146" height="24"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" red="0.61960784310000006" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i79-Fs-P1R">
-                                                <rect key="frame" x="146" y="0.0" width="79" height="24"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <color key="textColor" red="0.82745098039999998" green="0.1843137255" blue="0.1843137255" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="24" id="MJp-DQ-meg"/>
-                                        </constraints>
-                                    </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LjR-XJ-hfF" userLabel="lineLay">
-                                        <rect key="frame" x="0.0" y="126" width="349" height="1"/>
-                                        <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3qc-Fs-rO1" userLabel="line">
-                                                <rect key="frame" x="0.0" y="0.0" width="349" height="1"/>
-                                                <color key="backgroundColor" red="0.8980392157" green="0.8980392157" blue="0.8980392157" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="1" id="nKA-qB-kcu"/>
-                                                </constraints>
-                                            </view>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <constraints>
-                                            <constraint firstItem="3qc-Fs-rO1" firstAttribute="leading" secondItem="LjR-XJ-hfF" secondAttribute="leading" id="RE5-bM-gwT"/>
-                                            <constraint firstAttribute="height" constant="1" id="c4H-GV-hdW"/>
-                                            <constraint firstAttribute="bottom" secondItem="3qc-Fs-rO1" secondAttribute="bottom" id="md5-PF-OkR"/>
-                                            <constraint firstAttribute="trailing" secondItem="3qc-Fs-rO1" secondAttribute="trailing" id="w0x-HQ-wbU"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="music_icon_inactive" translatesAutoresizingMaskIntoConstraints="NO" id="TJf-1W-fbq">
+                                <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                 <constraints>
-                                    <constraint firstItem="otV-ce-Dtp" firstAttribute="leading" secondItem="zez-9B-1Nb" secondAttribute="leading" constant="55" id="s70-zz-M5y"/>
+                                    <constraint firstAttribute="width" constant="40" id="1e2-1l-OE6"/>
+                                    <constraint firstAttribute="height" constant="40" id="vQ2-qP-H2s"/>
                                 </constraints>
-                            </stackView>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bte-Z2-uaq">
+                                <rect key="frame" x="55" y="0.0" width="309" height="20"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="Миллионерлардан ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                                <size key="shadowOffset" width="1" height="1"/>
+                            </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </stackView>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="otV-ce-Dtp" userLabel="additionalView">
+                        <rect key="frame" x="70" y="100.5" width="309" height="24"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9:05 • 19 март 2019 • " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQ7-x3-vKB">
+                                <rect key="frame" x="0.0" y="0.0" width="146" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.61960784310000006" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i79-Fs-P1R">
+                                <rect key="frame" x="146" y="0.0" width="79" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.82745098039999998" green="0.1843137255" blue="0.1843137255" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="300" id="RRX-Qe-Dfx"/>
-                            <constraint firstItem="zez-9B-1Nb" firstAttribute="top" secondItem="mWj-Uj-9hQ" secondAttribute="top" id="dTk-Zy-f3G"/>
-                            <constraint firstAttribute="trailing" secondItem="zez-9B-1Nb" secondAttribute="trailing" id="g7Z-65-TIU"/>
-                            <constraint firstAttribute="height" constant="300" id="kf7-0n-1cl"/>
-                            <constraint firstItem="zez-9B-1Nb" firstAttribute="leading" secondItem="mWj-Uj-9hQ" secondAttribute="leading" id="uQ1-z5-oCS"/>
+                            <constraint firstAttribute="height" constant="24" id="MJp-DQ-meg"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3qc-Fs-rO1" userLabel="line">
+                        <rect key="frame" x="15" y="139.5" width="364" height="1"/>
+                        <color key="backgroundColor" red="0.8980392157" green="0.8980392157" blue="0.8980392157" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="nKA-qB-kcu"/>
                         </constraints>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="mWj-Uj-9hQ" secondAttribute="trailing" constant="15" id="06w-yB-AvR"/>
-                    <constraint firstItem="mWj-Uj-9hQ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="RMn-EO-YAC"/>
-                    <constraint firstItem="mWj-Uj-9hQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="RkZ-bh-EE7"/>
+                    <constraint firstItem="3qc-Fs-rO1" firstAttribute="top" secondItem="otV-ce-Dtp" secondAttribute="bottom" constant="15" id="30V-Ow-uUm"/>
+                    <constraint firstItem="ZXr-0U-h2C" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="9Xk-YK-kgF"/>
+                    <constraint firstAttribute="bottom" secondItem="3qc-Fs-rO1" secondAttribute="bottom" id="E0F-D7-2LG"/>
+                    <constraint firstAttribute="trailing" secondItem="ZXr-0U-h2C" secondAttribute="trailing" constant="15" id="HTe-9a-6Kg"/>
+                    <constraint firstItem="otV-ce-Dtp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="70" id="T6i-Tn-oK0"/>
+                    <constraint firstAttribute="trailing" secondItem="otV-ce-Dtp" secondAttribute="trailing" constant="15" id="UEu-it-43O"/>
+                    <constraint firstItem="3qc-Fs-rO1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="Xv7-nb-YEY"/>
+                    <constraint firstAttribute="trailing" secondItem="3qc-Fs-rO1" secondAttribute="trailing" constant="15" id="an8-z7-Je2"/>
+                    <constraint firstItem="ZXr-0U-h2C" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="dPF-9E-zEx"/>
+                    <constraint firstItem="otV-ce-Dtp" firstAttribute="top" secondItem="ZXr-0U-h2C" secondAttribute="bottom" constant="15" id="rai-ki-Z1d"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
-            <point key="canvasLocation" x="90.579710144927546" y="123.54910714285714"/>
+            <connections>
+                <outlet property="label" destination="bte-Z2-uaq" id="Q9L-rU-cup"/>
+            </connections>
+            <point key="canvasLocation" x="123.18840579710145" y="120.87053571428571"/>
         </tableViewCell>
     </objects>
     <resources>

@@ -19,12 +19,19 @@ class TopTabVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBar.isHidden = true
+        
+        appBar.layer.shadowRadius = 5
+        appBar.layer.shadowOpacity = 0.1
+        appBar.layer.shadowOffset = CGSize(width: 0, height: 1)
+        appBar.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        
         //TODO: Declare delegate methods
         tableView.delegate = self
         tableView.dataSource = self
 
         //TODO: Register nib file
-        tableView.register(UINib(nibName: "MediumNewsCell", bundle: nil), forCellReuseIdentifier: "mediumNewsCell")
+        tableView.register(UINib(nibName: "GalleryNewsCell", bundle: nil), forCellReuseIdentifier: "galleryNewsCell")
         
         //Configure table view for autoChange Height
         configureTableView()
@@ -42,11 +49,17 @@ class TopTabVC: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "mediumNewsCell", for: indexPath) as! MediumNewsCell
-        
-        indexPath.section
-        
-        return cell
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "galleryNewsCell", for: indexPath) as? GalleryNewsCell{
+            if indexPath.row % 2 == 0{
+//                cell.updateItem(text: "Slomdsadsa")
+            }else{
+//                cell.updateItem(text: "Slomdsadsa Slomdsadsa Slomdsadsa Slomdsadsa Slomdsadsa Slomdsadsa ")
+            }
+            
+            return cell
+        }else{
+            return UITableViewCell()
+        }
     }
     
     

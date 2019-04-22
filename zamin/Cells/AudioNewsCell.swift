@@ -10,6 +10,12 @@ import UIKit
 
 class AudioNewsCell: UITableViewCell {
 
+    @IBOutlet weak var label : UILabel!
+    
+    func updateItem(text: String){
+        label.text = text
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

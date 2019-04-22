@@ -37,6 +37,10 @@
 		CABE13F3226CD7500042E62F /* NewsFeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABE13F2226CD7500042E62F /* NewsFeedVC.swift */; };
 		CABE13F5226CD7630042E62F /* FavouriteNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABE13F4226CD7630042E62F /* FavouriteNewsVC.swift */; };
 		CABE13F7226CD7760042E62F /* MediaNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABE13F6226CD7760042E62F /* MediaNewsVC.swift */; };
+		CAD06CA4226E275100C68B67 /* SearchNewsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD06CA3226E275100C68B67 /* SearchNewsVC.swift */; };
+		CAD06CA6226E276400C68B67 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD06CA5226E276400C68B67 /* ProfileVC.swift */; };
+		CAD06CA8226E277900C68B67 /* SearchResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD06CA7226E277900C68B67 /* SearchResultVC.swift */; };
+		CAD06CAA226E279800C68B67 /* SelectCategoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD06CA9226E279800C68B67 /* SelectCategoriesVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +78,10 @@
 		CABE13F2226CD7500042E62F /* NewsFeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedVC.swift; sourceTree = "<group>"; };
 		CABE13F4226CD7630042E62F /* FavouriteNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteNewsVC.swift; sourceTree = "<group>"; };
 		CABE13F6226CD7760042E62F /* MediaNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaNewsVC.swift; sourceTree = "<group>"; };
+		CAD06CA3226E275100C68B67 /* SearchNewsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNewsVC.swift; sourceTree = "<group>"; };
+		CAD06CA5226E276400C68B67 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
+		CAD06CA7226E277900C68B67 /* SearchResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultVC.swift; sourceTree = "<group>"; };
+		CAD06CA9226E279800C68B67 /* SelectCategoriesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCategoriesVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +139,10 @@
 				CABE13F2226CD7500042E62F /* NewsFeedVC.swift */,
 				CABE13F4226CD7630042E62F /* FavouriteNewsVC.swift */,
 				CABE13F6226CD7760042E62F /* MediaNewsVC.swift */,
+				CAD06CA3226E275100C68B67 /* SearchNewsVC.swift */,
+				CAD06CA5226E276400C68B67 /* ProfileVC.swift */,
+				CAD06CA7226E277900C68B67 /* SearchResultVC.swift */,
+				CAD06CA9226E279800C68B67 /* SelectCategoriesVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -303,6 +315,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-zamin/Pods-zamin-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/PagingMenuController/PagingMenuController.framework",
 				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
@@ -313,6 +326,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PagingMenuController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
@@ -331,14 +345,18 @@
 				CABE13F7226CD7760042E62F /* MediaNewsVC.swift in Sources */,
 				CA4331AF226997B200F00C5C /* MediumNewsCell.swift in Sources */,
 				CABE13F3226CD7500042E62F /* NewsFeedVC.swift in Sources */,
+				CAD06CA6226E276400C68B67 /* ProfileVC.swift in Sources */,
 				CA8E598222691E14004E366F /* SimpleNewsModel.swift in Sources */,
 				CA8E597F226919D1004E366F /* CategoryNewsModel.swift in Sources */,
 				CA471348226611C50052C860 /* ViewController.swift in Sources */,
 				CA4331B222699DD300F00C5C /* TopTabVC.swift in Sources */,
 				CA4331AB2269911C00F00C5C /* CategoriesCollectionCell.swift in Sources */,
+				CAD06CA8226E277900C68B67 /* SearchResultVC.swift in Sources */,
 				CABE13F0226CD3300042E62F /* FavouriteNewsCell.swift in Sources */,
+				CAD06CA4226E275100C68B67 /* SearchNewsVC.swift in Sources */,
 				CABE13EC226CA2F20042E62F /* GalleryNewsCell.swift in Sources */,
 				CABE13E8226CA1C80042E62F /* VideoNewsCell.swift in Sources */,
+				CAD06CAA226E279800C68B67 /* SelectCategoriesVC.swift in Sources */,
 				CABE13E0226C9DE10042E62F /* SmallNewsCell.swift in Sources */,
 				CABE13F5226CD7630042E62F /* FavouriteNewsVC.swift in Sources */,
 				CABE13DC226C742A0042E62F /* LargeNewsCell.swift in Sources */,
