@@ -90,13 +90,6 @@
                                 <color key="textColor" red="0.61960784310000006" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bookmark_inactive" translatesAutoresizingMaskIntoConstraints="NO" id="ghv-I2-fKR">
-                                <rect key="frame" x="351" y="2" width="20" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="79z-Xp-Gqj"/>
-                                    <constraint firstAttribute="width" constant="20" id="sqh-GT-wbk"/>
-                                </constraints>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uXi-ct-cm1">
                                 <rect key="frame" x="146" y="0.0" width="79" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -104,11 +97,27 @@
                                 <color key="textColor" red="0.82745098039999998" green="0.1843137255" blue="0.1843137255" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bookmark_inactive" translatesAutoresizingMaskIntoConstraints="NO" id="ghv-I2-fKR">
+                                <rect key="frame" x="351" y="2" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="79z-Xp-Gqj"/>
+                                    <constraint firstAttribute="width" constant="20" id="sqh-GT-wbk"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SiQ-rQ-SlW" userLabel="bookmarkPressed">
+                                <rect key="frame" x="347" y="0.0" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="24" id="LlA-9S-weJ"/>
+                                    <constraint firstAttribute="height" constant="24" id="O51-i8-cAQ"/>
+                                </constraints>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="ghv-I2-fKR" secondAttribute="bottom" constant="2" id="CnE-VN-uaf"/>
+                            <constraint firstItem="SiQ-rQ-SlW" firstAttribute="centerY" secondItem="Vzd-9t-sNP" secondAttribute="centerY" id="Oh3-w9-0DE"/>
                             <constraint firstAttribute="height" constant="24" id="PXa-Zu-uUb"/>
+                            <constraint firstAttribute="trailing" secondItem="SiQ-rQ-SlW" secondAttribute="trailing" id="Uv2-f3-lU3"/>
                             <constraint firstAttribute="trailing" secondItem="ghv-I2-fKR" secondAttribute="trailing" id="cIW-z8-KuI"/>
                             <constraint firstItem="ghv-I2-fKR" firstAttribute="top" secondItem="Vzd-9t-sNP" secondAttribute="top" constant="2" id="hfW-w6-Rsq"/>
                         </constraints>

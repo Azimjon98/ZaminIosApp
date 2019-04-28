@@ -10,27 +10,29 @@ import UIKit
 
 class ProfileVC: UIViewController {
 
-    @IBOutlet weak var appBar: UIView!
+    
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var notificationButton: UIButton!
+    @IBOutlet weak var categoriesButton: UIButton!
+    @IBOutlet weak var languageButton: UIButton!
+    @IBOutlet weak var img: UIImageView!
+    @IBOutlet weak var img2: UIImageView!
+    @IBOutlet weak var img3: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        
-        appBar.layer.shadowRadius = 5
-        appBar.layer.shadowOpacity = 0.1
-        appBar.layer.shadowOffset = CGSize(width: 0, height: 1)
-        appBar.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        // Do any additional setup after loading the
+        img.changeColor(color: #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1))
+        img2.changeColor(color: #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1))
+        img3.changeColor(color: #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 1))
+        loginButton.changeColor(color: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+        notificationButton.changeColor(color: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+        categoriesButton.changeColor(color: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
+        languageButton.changeColor(color: #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0))
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+    
+  
 
 }

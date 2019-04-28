@@ -9,6 +9,7 @@
 import UIKit
 
 class MediumNewsCell: UITableViewCell {
+    var model: SimpleNewsModel?
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var titleImageView: UIImageView!
@@ -26,6 +27,13 @@ class MediumNewsCell: UITableViewCell {
 
         // Configure the view for the selected state
         
+    }
+    
+    func updateCell(m: SimpleNewsModel){
+        model = m
+        titleLabel.attributedText = String.myAttributedString(text: model?.title ?? "", spacing: 4)
+        titleImageView.load(url: model?.imageUrl ?? "")
+        dateLabel.text = String.parseMyDate(date: model?.date ?? "")
     }
     
 }

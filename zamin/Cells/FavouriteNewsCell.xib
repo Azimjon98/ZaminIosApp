@@ -58,13 +58,6 @@
                                 <color key="textColor" red="0.61960784310000006" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bookmark_inactive" translatesAutoresizingMaskIntoConstraints="NO" id="5Li-7B-8uJ">
-                                <rect key="frame" x="330" y="2" width="20" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="20" id="9w0-Zy-O4w"/>
-                                    <constraint firstAttribute="height" constant="20" id="VG3-4a-1oS"/>
-                                </constraints>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LOQ-Jr-ZfF">
                                 <rect key="frame" x="146" y="0.0" width="79" height="24"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -72,13 +65,29 @@
                                 <color key="textColor" red="0.82745098039999998" green="0.1843137255" blue="0.1843137255" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bookmark_inactive" translatesAutoresizingMaskIntoConstraints="NO" id="5Li-7B-8uJ">
+                                <rect key="frame" x="330" y="2" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="20" id="9w0-Zy-O4w"/>
+                                    <constraint firstAttribute="height" constant="20" id="VG3-4a-1oS"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nPP-pY-XgZ" userLabel="bookmarkPressed">
+                                <rect key="frame" x="326" y="0.0" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="Pvl-P3-PyF"/>
+                                    <constraint firstAttribute="width" constant="24" id="cNC-2B-Alp"/>
+                                </constraints>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="5Li-7B-8uJ" secondAttribute="bottom" constant="2" id="AGu-W8-v5Z"/>
                             <constraint firstAttribute="trailing" secondItem="5Li-7B-8uJ" secondAttribute="trailing" id="OqX-mP-oaZ"/>
+                            <constraint firstItem="nPP-pY-XgZ" firstAttribute="centerY" secondItem="rUE-k9-Mhx" secondAttribute="centerY" id="QlB-9b-y44"/>
                             <constraint firstItem="5Li-7B-8uJ" firstAttribute="top" secondItem="rUE-k9-Mhx" secondAttribute="top" constant="2" id="s37-Fs-Qoi"/>
                             <constraint firstAttribute="height" constant="24" id="s8T-50-zny"/>
+                            <constraint firstAttribute="trailing" secondItem="nPP-pY-XgZ" secondAttribute="trailing" id="vFT-bA-1Id"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BEh-dM-09n" userLabel="line">

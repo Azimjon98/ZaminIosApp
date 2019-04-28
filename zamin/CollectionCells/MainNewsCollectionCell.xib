@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="mainNewsCollectionCell" id="gTV-IL-0wX" customClass="MainNewsCollectionCell" customModule="zamin" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="365" height="309"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="365" height="309"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo_2018-05-08_20-49-44" translatesAutoresizingMaskIntoConstraints="NO" id="IHY-9W-D6P">
+                        <rect key="frame" x="15" y="10" width="335" height="160"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="160" id="PPb-KM-dd0"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                <integer key="value" value="6"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MBH-aj-0h8">
+                        <rect key="frame" x="15" y="185" width="335" height="70"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="70" id="aD8-wT-43U"/>
+                        </constraints>
+                        <attributedString key="attributedText">
+                            <fragment content="Президент фармони: БАА фуқаролари учун визасиз режим белгиландиПрезидент фармони: БАА фуқаролари учун визасиз режим белгиланди">
+                                <attributes>
+                                    <color key="NSColor" red="0.12941176470588234" green="0.12941176470588234" blue="0.12941176470588234" alpha="1" colorSpace="calibratedRGB"/>
+                                    <font key="NSFont" metaFont="system" size="17"/>
+                                    <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural" lineSpacing="4" tighteningFactorForTruncation="0.0"/>
+                                </attributes>
+                            </fragment>
+                        </attributedString>
+                        <nil key="highlightedColor"/>
+                        <size key="shadowOffset" width="1" height="-1"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mP7-oj-7xZ" userLabel="additionalView">
+                        <rect key="frame" x="15" y="270" width="335" height="24"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9:05 • 19 март 2019 • " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hL3-Nc-Tgn">
+                                <rect key="frame" x="0.0" y="0.0" width="146" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.61960784310000006" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FbO-2n-Yay">
+                                <rect key="frame" x="146" y="0.0" width="79" height="24"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.82745098039999998" green="0.1843137255" blue="0.1843137255" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T4G-ub-wTj" userLabel="bookmarkPressed">
+                                <rect key="frame" x="311" y="0.0" width="24" height="24"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="24" id="RU5-65-MU6"/>
+                                    <constraint firstAttribute="width" constant="24" id="gj9-Nk-9vC"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="4" minY="2" maxX="4" maxY="2"/>
+                                <state key="normal" image="bookmark_inactive"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="T4G-ub-wTj" firstAttribute="centerY" secondItem="mP7-oj-7xZ" secondAttribute="centerY" id="UfZ-cG-vp1"/>
+                            <constraint firstAttribute="height" constant="24" id="XHZ-mW-h5x"/>
+                            <constraint firstAttribute="trailing" secondItem="T4G-ub-wTj" secondAttribute="trailing" id="gwu-bM-kud"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="MBH-aj-0h8" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="Lfz-lA-0vs"/>
+                <constraint firstItem="MBH-aj-0h8" firstAttribute="top" secondItem="IHY-9W-D6P" secondAttribute="bottom" constant="15" id="OGZ-GA-ZUc"/>
+                <constraint firstAttribute="trailing" secondItem="IHY-9W-D6P" secondAttribute="trailing" constant="15" id="Pb6-4R-o0K"/>
+                <constraint firstItem="mP7-oj-7xZ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="PjB-dS-xHJ"/>
+                <constraint firstItem="IHY-9W-D6P" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="W6v-af-Wq2"/>
+                <constraint firstItem="IHY-9W-D6P" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="cRW-hA-7SA"/>
+                <constraint firstAttribute="trailing" secondItem="MBH-aj-0h8" secondAttribute="trailing" constant="15" id="d1R-G6-7mm"/>
+                <constraint firstAttribute="bottom" secondItem="mP7-oj-7xZ" secondAttribute="bottom" constant="15" id="i9G-PT-VS2"/>
+                <constraint firstItem="mP7-oj-7xZ" firstAttribute="top" secondItem="MBH-aj-0h8" secondAttribute="bottom" constant="15" id="mAN-RR-qlf"/>
+                <constraint firstAttribute="trailing" secondItem="mP7-oj-7xZ" secondAttribute="trailing" constant="15" id="rxz-8L-4ir"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <size key="customSize" width="365" height="309"/>
+            <connections>
+                <outlet property="bookmarkButton" destination="T4G-ub-wTj" id="hCr-sY-c93"/>
+                <outlet property="categoryNameLabel" destination="FbO-2n-Yay" id="u7M-tz-oRi"/>
+                <outlet property="dateLabel" destination="hL3-Nc-Tgn" id="V2l-Hg-ihQ"/>
+                <outlet property="imageView" destination="IHY-9W-D6P" id="88s-fP-Pqf"/>
+                <outlet property="titleLabel" destination="MBH-aj-0h8" id="ZT9-L4-YDT"/>
+            </connections>
+            <point key="canvasLocation" x="115.21739130434783" y="70.647321428571431"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <image name="bookmark_inactive" width="18.5" height="24"/>
+        <image name="photo_2018-05-08_20-49-44" width="720" height="1280"/>
+    </resources>
+</document>

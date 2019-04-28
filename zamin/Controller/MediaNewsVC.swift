@@ -7,16 +7,27 @@
 //
 
 import UIKit
-import PagingMenuController
+import XLPagerTabStrip
 
-class MediaNewsVC: UIViewController {
+class MediaNewsVC: SegmentedPagerTabStripViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
+        
+    
     }
     
+    override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        let audioController = sb.instantiateViewController(withIdentifier: "audioInsideMediaVC")
+        let videoController = sb.instantiateViewController(withIdentifier: "videoInsideMediaVC")
+        let galleryController = sb.instantiateViewController(withIdentifier: "galleryInsideMediaVC")
+        
+        return [audioController, videoController, galleryController]
+//          return [AudioInsideMediaVC(), VideoInsideMediaVC(), GalleryInsideMediaVC()]
+    }
 
     /*
     // MARK: - Navigation
