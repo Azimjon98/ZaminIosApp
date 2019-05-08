@@ -10,10 +10,10 @@ import Foundation
 import Alamofire
 
 class ApiHelper{
-    static func getAllCategories() -> [String: String]{
+    static func getAllCategories(_ lang: String = LanguageHelper.apiLang()) -> [String: String]{
         return
             [
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "lang": lang
             ]
         
     }
@@ -23,7 +23,7 @@ class ApiHelper{
             [
                 "offset" : "\(offset)",
                 "limit": limit,
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "lang": LanguageHelper.apiLang()
             ]
         
     }
@@ -34,7 +34,7 @@ class ApiHelper{
                 "offset" : "1",
                 "limit": "10",
                 "main": "1",
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "lang": LanguageHelper.apiLang()
         ]
         
     }
@@ -45,24 +45,32 @@ class ApiHelper{
                 "offset" : "\(offset)",
                 "limit": limit,
                 "popular" : "1",
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "lang": LanguageHelper.apiLang()
         ]
         
     }
     
-    static func getContentWithId(id: Int) -> [String: String]{
+    static func getContentWithId(id: String) -> [String: String]{
         return
             [
-                "id" : "\(id)",
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "id" : id,
+                "lang": LanguageHelper.apiLang()
         ]
     }
     
-    static func getContentTags(id: Int) -> [String: String]{
+    static func getContentInside(id: String) -> [String: String]{
         return
             [
-                "id" : "\(id)",
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "id" : id,
+                "lang": LanguageHelper.apiLang()
+        ]
+    }
+    
+    static func getContentTags(id: String) -> [String: String]{
+        return
+            [
+                "id" : id,
+                "lang": LanguageHelper.apiLang()
         ]
     }
     
@@ -72,7 +80,7 @@ class ApiHelper{
                 "offset" : "\(offset)",
                 "limit": limit,
                 "category" : categoryId,
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "lang": LanguageHelper.apiLang()
         ]
         
     }
@@ -83,7 +91,7 @@ class ApiHelper{
                 "offset" : "\(offset)",
                 "limit": limit,
                 "tagname" : tagName,
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "lang": LanguageHelper.apiLang()
         ]
         
     }
@@ -94,7 +102,7 @@ class ApiHelper{
                 "offset" : "\(offset)",
                 "limit": limit,
                 "key" : key,
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "lang": LanguageHelper.apiLang()
         ]
     }
     
@@ -104,7 +112,7 @@ class ApiHelper{
                 "offset" : "\(offset)",
                 "limit": limit,
                 "type" : type,
-                "lang": UserDefaults.standard.string(forKey: Constants.KEY_LANG) ?? "oz"
+                "lang": LanguageHelper.apiLang()
         ]
     }
     

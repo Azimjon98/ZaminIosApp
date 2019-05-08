@@ -12,10 +12,9 @@ class CategoryCell: UICollectionViewCell {
     
     @IBOutlet weak var titleLabel: UILabel!
     
-    var title : String!{
+    var model : EntityCategoryModel!{
         didSet{
-            titleLabel.text = title
-            self.layoutIfNeeded()
+            titleLabel.text = model.name
         }
     }
     

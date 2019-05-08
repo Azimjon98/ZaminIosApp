@@ -7,44 +7,47 @@
 //
 
 import Foundation
+import SwiftyJSON
+import RealmSwift
 
 class ContentNewsModel{
-    public var newsId: String;
-    public var title: String;
-    public var imageUrl: String;
-    public var originalUrl: String;
-    public var categoryId: String;
-    public var categoryName: String;
-    public var date: String;
-    public var viewedCount: String;
-    public var isWished : Bool;
-    public var contentUrl : String;
+    public var newsId: String = "";
+    public var title: String = "";
+    public var imageUrl: String = "";
+    public var originalUrl: String = "";
+    public var categoryId: String = "";
+    public var categoryName: String = "";
+    public var date: String = "";
+    public var isWished : Bool = false;
+    public var viewedCount : String = "1";
+    public var contentUrl : String = "";
     
-    init(newsId: String, title: String, imageUrl: String, originalUrl: String, categoryId: String, categoryName: String, date: String, viewedCount: String, contentUrl: String) {
-        self.newsId = newsId
-        self.title = title
-        self.imageUrl = imageUrl
-        self.originalUrl = originalUrl
-        self.categoryId = categoryId
-        self.categoryName = categoryName
-        self.date = date
-        self.viewedCount = viewedCount
-        self.contentUrl = contentUrl
+    
+}
+
+extension ContentNewsModel{
+    
+    static func parse(json: JSON) -> ContentNewsModel{
+        let model = ContentNewsModel()
         
-        isWished = false
+        if let newsId = json["newsID"].string{ model.newsId = newsId }
+        if let title = json["title"].string{ model.title = title }
+        if let date = json["publishedAt"].string{ model.date = date }
+        if let categoryId = json["categoryID"].string{ model.categoryId = categoryId }
+        if let originalUrl = json["url"].string{ model.originalUrl = originalUrl }
+        if let imageUrl = json["urlToImage"].string{ model.imageUrl = imageUrl }
+        if let viewedCount = json["viewed"].string{ model.viewedCount = viewedCount }
+        if let contentUrl = json["urlparser"].string{ model.contentUrl = contentUrl }
+        
+        
+        let categories: Results<EntityCategoryModel> = (try! Realm()).objects(EntityCategoryModel.self)
+        for i in categories{
+            if i.categoryId == model.categoryId{
+                model.categoryName = i.name
+                break
+            }
+        }
+        return model
     }
     
-    init(newsId: String, title: String, imageUrl: String, originalUrl: String, categoryId: String, categoryName: String, date: String, viewedCount: String,contentUrl: String, isWished: Bool) {
-        self.newsId = newsId
-        self.title = title
-        self.imageUrl = imageUrl
-        self.originalUrl = originalUrl
-        self.categoryId = categoryId
-        self.categoryName = categoryName
-        self.date = date
-        self.viewedCount = viewedCount
-        self.contentUrl = contentUrl
-        
-        self.isWished = isWished
-    }
 }

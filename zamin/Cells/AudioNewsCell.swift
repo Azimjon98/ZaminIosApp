@@ -9,11 +9,17 @@
 import UIKit
 
 class AudioNewsCell: UITableViewCell {
-
+    @IBOutlet weak var playerButton: UIButton!
     @IBOutlet weak var label : UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var categoryLabel: UILabel!
     
-    func updateItem(text: String){
-        label.text = text
+    var model : SimpleNewsModel!{
+        didSet{
+            label.attributedText = String.myTitleAttributedString(text: model.title)
+            dateLabel.text = String.parseMyDate(date: model.date)
+            categoryLabel.text = model.categoryName
+        }
     }
     
     override func awakeFromNib() {
@@ -21,10 +27,5 @@ class AudioNewsCell: UITableViewCell {
         // Initialization code
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
     
 }

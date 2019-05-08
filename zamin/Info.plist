@@ -6,6 +6,8 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+        <key>NSAllowsArbitraryLoadsInWebContent</key>
+        <true/>
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>m.zamin.uz</key>
@@ -56,5 +58,6 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+    
 </dict>
 </plist>

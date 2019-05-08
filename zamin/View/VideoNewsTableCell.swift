@@ -9,11 +9,22 @@
 import UIKit
 
 class VideoNewsTableCell: UITableViewCell {
-
-    @IBOutlet weak var collectionView: VideoNewsCollection!
+    @IBOutlet weak var textVideoNew: UILabel!
+    @IBOutlet weak var videoAllButton: UIButton!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        changeLanguage()
     }
 
+}
+
+extension VideoNewsTableCell{
+    
+    func changeLanguage(){
+        textVideoNew.text = LanguageHelper.getString(stringId: .text_video_news)
+        videoAllButton.setTitle(LanguageHelper.getString(stringId: .text_all)
+            , for: .normal)
+    }
 }

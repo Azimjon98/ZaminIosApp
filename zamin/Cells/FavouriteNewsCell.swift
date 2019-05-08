@@ -9,16 +9,43 @@
 import UIKit
 
 class FavouriteNewsCell: UITableViewCell {
-
+    @IBOutlet weak var indexLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var bookmarkButton: UIButton!
+    
+    var delegate: MyWishListDelegate?
+    
+    var index : Int!{
+        didSet{
+            indexLabel.text = (index > 10 ? "" : "0") + "\(index ?? 1)"
+        }
+    }
+    
+    var model : EntityFavouriteNewsModel!{
+        didSet{
+            titleLabel.attributedText = String.myTitleAttributedString(text: model.title)
+            dateLabel.text = String.parseMyDate(date: model.date)
+            categoryLabel.text = model.categoryName
+            
+            bookmarkButton.addTarget(self, action: #selector(bookmarkPressed), for: .touchUpInside)
+            bookmarkButton.tag = 1
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
+    
+    @objc func bookmarkPressed(sender: UIButton){
+        if sender.tag == 1{
+            if model.isWished{
+                delegate?.unwished(newsId: model.newsId)
+            }
+        }
     }
+    
+
     
 }

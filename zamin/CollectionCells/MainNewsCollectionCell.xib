@@ -19,7 +19,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="365" height="309"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo_2018-05-08_20-49-44" translatesAutoresizingMaskIntoConstraints="NO" id="IHY-9W-D6P">
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_large" translatesAutoresizingMaskIntoConstraints="NO" id="IHY-9W-D6P">
                         <rect key="frame" x="15" y="10" width="335" height="160"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="160" id="PPb-KM-dd0"/>
@@ -50,16 +50,14 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mP7-oj-7xZ" userLabel="additionalView">
                         <rect key="frame" x="15" y="270" width="335" height="24"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9:05 • 19 март 2019 • " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hL3-Nc-Tgn">
-                                <rect key="frame" x="0.0" y="0.0" width="146" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="9:05 •" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hL3-Nc-Tgn">
+                                <rect key="frame" x="0.0" y="3.5" width="40.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.61960784310000006" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FbO-2n-Yay">
-                                <rect key="frame" x="146" y="0.0" width="79" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FbO-2n-Yay">
+                                <rect key="frame" x="40.5" y="3.5" width="270.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.82745098039999998" green="0.1843137255" blue="0.1843137255" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
@@ -76,9 +74,14 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="T4G-ub-wTj" firstAttribute="leading" secondItem="FbO-2n-Yay" secondAttribute="trailing" id="EmR-rc-OsR"/>
                             <constraint firstItem="T4G-ub-wTj" firstAttribute="centerY" secondItem="mP7-oj-7xZ" secondAttribute="centerY" id="UfZ-cG-vp1"/>
                             <constraint firstAttribute="height" constant="24" id="XHZ-mW-h5x"/>
+                            <constraint firstItem="FbO-2n-Yay" firstAttribute="leading" secondItem="hL3-Nc-Tgn" secondAttribute="trailing" id="fvH-f2-TkZ"/>
                             <constraint firstAttribute="trailing" secondItem="T4G-ub-wTj" secondAttribute="trailing" id="gwu-bM-kud"/>
+                            <constraint firstItem="hL3-Nc-Tgn" firstAttribute="centerY" secondItem="mP7-oj-7xZ" secondAttribute="centerY" id="kgU-So-G1g"/>
+                            <constraint firstItem="FbO-2n-Yay" firstAttribute="centerY" secondItem="mP7-oj-7xZ" secondAttribute="centerY" id="pzA-zP-TEN"/>
+                            <constraint firstItem="hL3-Nc-Tgn" firstAttribute="leading" secondItem="mP7-oj-7xZ" secondAttribute="leading" id="s1C-2g-DWm"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -109,6 +112,6 @@
     </objects>
     <resources>
         <image name="bookmark_inactive" width="18.5" height="24"/>
-        <image name="photo_2018-05-08_20-49-44" width="720" height="1280"/>
+        <image name="empty_large" width="343" height="160"/>
     </resources>
 </document>

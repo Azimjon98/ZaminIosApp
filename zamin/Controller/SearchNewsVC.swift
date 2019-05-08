@@ -10,28 +10,28 @@ import UIKit
 import Alamofire
 import SVProgressHUD
 import SwiftyJSON
+import RealmSwift
 
-class SearchNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
+class SearchNewsVC: UIViewController {
+    @IBOutlet weak var searchView : UISearchBar!
+    @IBOutlet weak var tableView: UITableView!
+    
+    let realm = try! Realm()
 
     //TODO: - Variables
-    let urlSearch = "http://m.zamin.uz/api/v1/search.php"
     var items: [SimpleNewsModel] = [SimpleNewsModel]()
+    var allIds : [String]?
     
+    var noItems:Bool = false
     var offset : Int = 0
     var limit: String = "10"
     var key: String = ""
     var selectedIndex: Int = 0
     
-    @IBOutlet weak var searchView : UISearchBar!
-    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-        //Init searchView
-        searchView.delegate = self
         //FIXME: - continue it
 //        searchView.placeholder =
         
@@ -39,67 +39,81 @@ class SearchNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         tableView.register(UINib(nibName: "MediumNewsCell", bundle: nil), forCellReuseIdentifier: "mediumNewsCell")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
+        changeLanguage()
+    }
+    
+    //MARK Out METHODS
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToContent"{
+            if let dest: ContentVC = segue.destination as? ContentVC{
+                dest.model = items[selectedIndex]
+            }
+        }
+    }
+
+}
+
+extension SearchNewsVC{
+    
     //TODO: - Netwotking
     
-    func searchNews(_ fromBegin: Bool){
-        //checking for whitespacings
-        if  key.trim().isEmpty{
-            return
-        }
-        
+    func searchNews(_ fromBegin: Bool = false){
+        self.tableView.removeBackView()
         if  fromBegin{
+            noItems = false
             offset = 1
             items.removeAll()
             tableView.reloadData()
+            SVProgressHUD.show()
         }
         
-        print("Start searching: \(key)")
-        SVProgressHUD.show()
-
-        Alamofire.request(urlSearch, method: .get,parameters: ApiHelper.searchNewsWithTitle(offset: offset, limit: limit, key: key)).responseJSON  { (response) in
+        Alamofire.request(Constants.URL_SEARCH_NEWS, method: .get,parameters: ApiHelper.searchNewsWithTitle(offset: offset, limit: limit, key: key)).responseJSON  { (response) in
             SVProgressHUD.dismiss()
+            
             if response.result.isSuccess{
                 let data : JSON = JSON(response.result.value!)
-                print(data)
                 self.parseNews(data)
-            
+                
                 self.offset += 1
             }else{
                 print("Error: " + String(describing: response.result.error))
+                if self.offset == 1{
+                    self.tableView.setBigEmptyView()
+                }
             }
             
         }
         
         
-    
+        
     }
     
     //TODO: - PARSING METHODS
     
     func parseNews(_ json: JSON){
-        for i in json["articles"].arrayValue{
-            let model : SimpleNewsModel = SimpleNewsModel()
-            
-            model.newsId =  i["newsIs"].stringValue
-            model.categoryId = i["categoryID"].stringValue
-            model.date = i["publishedAt"].stringValue
-            model.imageUrl = i["urlToImage"].stringValue
-            model.originalUrl = i["url"].stringValue
-            model.title = i["title"].stringValue
-            
-            self.items.append(model)
+        let items = SimpleNewsModel.parse(json: json) ?? [SimpleNewsModel]()
+        
+        if  items.count == 0{
+            if  offset == 1{
+                self.tableView.setBigNoItemView()
+            }
+            noItems = true
+        }else{
+            self.items.append(contentsOf: items)
+            self.tableView.reloadData()
         }
         
-        self.tableView.reloadData()
     }
     
-    //TODO: - DELEGATE METHODS
-    
+}
+
+
+
+
+extension SearchNewsVC : UITableViewDelegate, UITableViewDataSource{
     //MARK: - DATASOURCE METHODS
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
@@ -107,22 +121,42 @@ class SearchNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "mediumNewsCell", for: indexPath) as? MediumNewsCell{
-            cell.updateCell(m: items[indexPath.row])
-    
-            if indexPath.row == items.count - 1{
-                searchNews(false)
-            }
+            cell.model = items[indexPath.row]
+            cell.delegate = self
+            
             return cell
-        }else{
+        }
+        
+        else{
             return UITableViewCell()
         }
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let cell = cell as? MediumNewsCell{
+            if allIds?.contains(cell.model.newsId) ?? false{
+                cell.bookItem()
+            } else{
+                cell.unbookItem()
+            }
+        }
+        
+        if indexPath.row == items.count - 1, !noItems{
+            searchNews()
+        }
+    }
+    
+    //TODO: - DELEGATE METHODS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndex = indexPath.row
         performSegue(withIdentifier: "goToContent", sender: self)
     }
     
+    
+}
+
+extension SearchNewsVC : UISearchBarDelegate{
     //MARK: - Search Bar delegate methods
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -142,17 +176,46 @@ class SearchNewsVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             key = text
             
         } else { return }
-
+        
         searchNews(true)
     }
+}
+
+extension SearchNewsVC{
     
-    //MARK Out METHODS
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToContent"{
-            if let dest: ContentVC = segue.destination as? ContentVC{
-                dest.model = items[selectedIndex]
+    func changeLanguage(){
+        searchView.placeholder = LanguageHelper.getString(stringId: .text_news)
+    }
+}
+
+
+extension SearchNewsVC : MyWishListDelegate{
+    
+    func wished(model: SimpleNewsModel) {
+        do{
+            try realm.write {
+                realm.add(model.convertToFavourites())
+                allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
             }
+        }catch{
+            print("Error(TopNewsVC) adding to realm")
         }
     }
-
+    
+    
+    
+    func unwished(newsId: String) {
+        
+        do{
+            try realm.write {
+                let objectsToDelete = realm.objects(EntityFavouriteNewsModel.self).filter("newsId = %@", newsId)
+                realm.delete(objectsToDelete)
+                allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
+                
+            }
+        }catch{
+            print("Error(TopNewsVC) adding to realm")
+        }
+    }
+    
 }

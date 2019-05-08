@@ -13,10 +13,12 @@ class Constants {
     
     public static let URL_TOP_NEWS : String = Constants.BASE_URL
     public static let URL_SEARCH_NEWS : String = Constants.BASE_URL + "search.php"
-    public static let URL_CATEGORIES : String = Constants.BASE_URL + "ategory.php"
+    public static let URL_CATEGORIES : String = Constants.BASE_URL + "category.php"
     public static let URL_CONTENT : String = Constants.BASE_URL + "article.php"
+    public static let URL_CONTENT_INSIDE : String = Constants.BASE_URL + "articleParser.php"
     public static let URL_TAGS : String = Constants.BASE_URL + "tags.php"
     public static let URL_MEDIA_NEWS : String = Constants.BASE_URL + "media.php"
+    
     
     
     

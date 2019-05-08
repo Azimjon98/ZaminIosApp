@@ -22,9 +22,9 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pUH-m1-I1j" userLabel="titleLay">
                         <rect key="frame" x="15" y="15" width="351" height="78"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo_2018-05-08_20-49-44" translatesAutoresizingMaskIntoConstraints="NO" id="as8-ii-NZt">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_large" translatesAutoresizingMaskIntoConstraints="NO" id="as8-ii-NZt">
                                 <rect key="frame" x="247" y="0.0" width="104" height="78"/>
-                                <color key="backgroundColor" red="0.78529505076142136" green="0.78529505076142136" blue="0.78529505076142136" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="0.78431372549019607" green="0.78431372549019607" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="78" id="KKp-XQ-FzD"/>
                                     <constraint firstAttribute="width" constant="104" id="m6F-4g-qIg"/>
@@ -65,53 +65,37 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1lH-YI-FhK" userLabel="additionalView">
                         <rect key="frame" x="15" y="108" width="351" height="24"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9:05 • 19 март 2019 • " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sao-zu-gt0">
-                                <rect key="frame" x="0.0" y="0.0" width="146" height="24"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="24" id="RYz-Zi-iMy"/>
-                                </constraints>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9:05" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sao-zu-gt0">
+                                <rect key="frame" x="0.0" y="3.5" width="30" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.61960784313725492" green="0.61960784313725492" blue="0.61960784313725492" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NAf-uc-0hP">
-                                <rect key="frame" x="146" y="0.0" width="78.5" height="24"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="24" id="xeg-Ap-igq"/>
-                                </constraints>
+                                <rect key="frame" x="30" y="3.5" width="78.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.82745098039215681" green="0.18431372549019609" blue="0.18431372549019609" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bookmark_inactive" translatesAutoresizingMaskIntoConstraints="NO" id="sLY-5P-VIH">
-                                <rect key="frame" x="329" y="2" width="20" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="l8b-CE-TDz"/>
-                                    <constraint firstAttribute="width" constant="20" id="zP9-aG-DLo"/>
-                                </constraints>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="REM-MY-wSb" userLabel="bookmarkPressed">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="REM-MY-wSb" userLabel="bookmarkPressed">
                                 <rect key="frame" x="327" y="0.0" width="24" height="24"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="24" id="WPm-W5-brr"/>
                                     <constraint firstAttribute="width" constant="24" id="xJp-ub-sYn"/>
                                 </constraints>
+                                <inset key="imageEdgeInsets" minX="4" minY="2" maxX="4" maxY="2"/>
+                                <state key="normal" image="bookmark_inactive"/>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="REM-MY-wSb" secondAttribute="trailing" id="Fsj-rt-rqn"/>
                             <constraint firstItem="REM-MY-wSb" firstAttribute="centerY" secondItem="1lH-YI-FhK" secondAttribute="centerY" id="Khb-5m-jIL"/>
-                            <constraint firstAttribute="bottom" secondItem="sLY-5P-VIH" secondAttribute="bottom" constant="2" id="OqX-04-0Yi"/>
-                            <constraint firstItem="NAf-uc-0hP" firstAttribute="top" secondItem="1lH-YI-FhK" secondAttribute="top" id="VvY-EX-PdR"/>
-                            <constraint firstAttribute="bottom" secondItem="NAf-uc-0hP" secondAttribute="bottom" id="bUK-tB-fHx"/>
+                            <constraint firstItem="NAf-uc-0hP" firstAttribute="centerY" secondItem="1lH-YI-FhK" secondAttribute="centerY" id="Mpm-Nd-Ufp"/>
                             <constraint firstItem="Sao-zu-gt0" firstAttribute="leading" secondItem="1lH-YI-FhK" secondAttribute="leading" id="cde-eF-MWk"/>
-                            <constraint firstAttribute="trailing" secondItem="sLY-5P-VIH" secondAttribute="trailing" constant="2" id="cdv-95-fcH"/>
-                            <constraint firstAttribute="bottom" secondItem="Sao-zu-gt0" secondAttribute="bottom" id="hf2-kD-RXa"/>
-                            <constraint firstItem="Sao-zu-gt0" firstAttribute="top" secondItem="1lH-YI-FhK" secondAttribute="top" id="hoS-fJ-AUj"/>
+                            <constraint firstItem="Sao-zu-gt0" firstAttribute="centerY" secondItem="1lH-YI-FhK" secondAttribute="centerY" id="fi9-WC-NZ5"/>
                             <constraint firstItem="NAf-uc-0hP" firstAttribute="leading" secondItem="Sao-zu-gt0" secondAttribute="trailing" id="op5-UV-kn6"/>
                             <constraint firstAttribute="height" constant="24" id="ptE-hA-FKS"/>
-                            <constraint firstItem="sLY-5P-VIH" firstAttribute="top" secondItem="1lH-YI-FhK" secondAttribute="top" constant="2" id="uks-1b-0cI"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kU8-ru-fyG" userLabel="line">
@@ -137,8 +121,8 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="bookmarkIcon" destination="sLY-5P-VIH" id="kAX-KF-wJH"/>
-                <outlet property="categoryNameLabel" destination="NAf-uc-0hP" id="vxI-NE-hk5"/>
+                <outlet property="bookmarkButton" destination="REM-MY-wSb" id="iRt-RR-FFt"/>
+                <outlet property="categoryLabel" destination="NAf-uc-0hP" id="raW-y0-AQd"/>
                 <outlet property="dateLabel" destination="Sao-zu-gt0" id="lbw-cz-Uhs"/>
                 <outlet property="titleImageView" destination="as8-ii-NZt" id="Oj5-Sb-uaZ"/>
                 <outlet property="titleLabel" destination="E1f-RS-aiq" id="Y46-Bd-e8V"/>
@@ -148,6 +132,6 @@
     </objects>
     <resources>
         <image name="bookmark_inactive" width="18.5" height="24"/>
-        <image name="photo_2018-05-08_20-49-44" width="720" height="1280"/>
+        <image name="empty_large" width="343" height="160"/>
     </resources>
 </document>

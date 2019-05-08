@@ -9,12 +9,20 @@
 import UIKit
 
 class LastNewsTableCell: UITableViewCell {
-
-    @IBOutlet weak var collectionView: LastNewsCollection!
+    @IBOutlet weak var textLastNews: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        changeLanguage()
     }
 
+}
+
+
+extension LastNewsTableCell{
+    
+    func changeLanguage(){
+        textLastNews.text = LanguageHelper.getString(stringId: .text_last_news)
+    }
 }

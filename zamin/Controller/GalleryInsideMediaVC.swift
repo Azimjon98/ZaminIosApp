@@ -11,88 +11,227 @@ import XLPagerTabStrip
 import SVProgressHUD
 import SwiftyJSON
 import Alamofire
+import RealmSwift
 
 class GalleryInsideMediaVC: UITableViewController, IndicatorInfoProvider {
+    @IBOutlet weak var titleView: UIView!
+    @IBOutlet weak var textTitle: UILabel!
+    @IBOutlet weak var textSubtitle: UILabel!
+    
+    let realm = try! Realm()
+    
+    var allIds : [String]?
+    var galleryNews : [SimpleNewsModel] = [SimpleNewsModel]()
+    
+    var offset : Int = 1
+    var limit: String = "10"
+    var selectedIndex = 0
+    var lastLocale: String = {
+        UserDefaults.getLocale()
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //TODO: Register nib file
+        tableView.register(UINib(nibName: "GalleryNewsCell", bundle: nil), forCellReuseIdentifier: "galleryNewsCell")
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-    }
-
-    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
-        return IndicatorInfo(title: "Galereya")
+        getGalleryNews(true)
     }
     
-    // MARK: - Table view data source
+    override func viewWillAppear(_ animated: Bool) {
+        allIds = realm.objects(EntityFavouriteNewsModel.self).map { return $0.newsId }
+        changeLanguage()
+        
+        if UserDefaults.getLocale() != lastLocale{
+            getGalleryNews()
+            lastLocale = UserDefaults.getLocale()
+        }else if galleryNews.count != 0 {
+            tableView.reloadData()
+        }
+    }
+    
+    func reload(){
+        allIds = realm.objects(EntityFavouriteNewsModel.self).map { return $0.newsId }
+        changeLanguage()
+        
+        if UserDefaults.getLocale() != lastLocale{
+            getGalleryNews()
+            lastLocale = UserDefaults.getLocale()
+        }else if galleryNews.count != 0 {
+            tableView.reloadData()
+        }
+    }
+    
+    @IBAction func refreshAction(_ sender: UIRefreshControl) {
+        allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
+        sender.endRefreshing()
+        getGalleryNews(true)
+    }
+    
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
+    func indicatorInfo(for pagerTabStripController: PagerTabStripViewController) -> IndicatorInfo {
+       return IndicatorInfo(title: LanguageHelper.getString(stringId: .tab_gallery))
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
-    }
-
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
-        return cell
-    }
-    */
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    
+    
+    //MARK Out METHODS
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "goToContent"{
+            if let dest: ContentVC = segue.destination as? ContentVC{
+                dest.model = galleryNews[selectedIndex]
+            }
+        }
+        
     }
-    */
+ 
 
+}
+
+extension GalleryInsideMediaVC{
+    
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return galleryNews.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "galleryNewsCell", for: indexPath) as? GalleryNewsCell{
+            cell.model = galleryNews[indexPath.row]
+            cell.delegate = self
+            
+            return cell
+        }else{
+            return UITableViewCell()
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let cell = cell as? GalleryNewsCell{
+            if allIds?.contains(cell.model.newsId) ?? false{
+                cell.bookItem()
+            } else{
+                cell.unbookItem()
+            }
+        }
+        
+        if indexPath.row == galleryNews.count - 1{
+            self.getGalleryNews()
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        selectedIndex = indexPath.row
+        performSegue(withIdentifier: "goToContent", sender: self)
+    }
+}
+
+
+
+
+extension GalleryInsideMediaVC{
+    
+    
+    //MARK: Networking
+    
+    func getGalleryNews(_ fromBegin: Bool = false){
+        if  fromBegin{
+            offset = 1
+            self.galleryNews.removeAll()
+            tableView.reloadData()
+            SVProgressHUD.show()
+        }
+        
+        print("offset: \(offset)")
+        
+        Alamofire.request(Constants.URL_MEDIA_NEWS,
+                          method: .get,
+                          parameters: ApiHelper.getMediaNewsWithType(offset: offset, limit: limit, type: "1"))
+            .responseJSON {
+                response in
+                SVProgressHUD.dismiss()
+                
+                if response.result.isSuccess{
+                    let data : JSON = JSON(response.result.value!)
+                    
+                    self.parseNews(data)
+                    self.offset += 1
+                }else{
+                    print("Error: " + String(describing: response.result.error))
+                    if  self.offset == 1{
+                        self.titleView.isHidden = true
+                        self.tableView.setBigEmptyView()
+                        if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
+                            button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
+                        }
+                    }
+                }
+        }
+        
+        
+    }
+    
+    //TODO: - PARSING METHODS
+    
+    func parseNews(_ json: JSON){
+        self.galleryNews.append(contentsOf: SimpleNewsModel.parse(json: json,type: 1) ?? [SimpleNewsModel]())
+        
+        self.titleView.isHidden = false
+        self.tableView.removeBackView()
+        self.tableView.reloadData()
+    }
+    
+}
+
+
+
+extension GalleryInsideMediaVC{
+    
+    func changeLanguage(){
+        textTitle.text = LanguageHelper.getString(stringId: .title_foto)
+        textSubtitle.text = LanguageHelper.getString(stringId: .message_foto)
+    }
+}
+
+extension GalleryInsideMediaVC : MyWishListDelegate{
+    
+    func wished(model: SimpleNewsModel) {
+        do{
+            try realm.write {
+                realm.add(model.convertToFavourites())
+                allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
+            }
+        }catch{
+            print("Error(TopNewsVC) adding to realm")
+        }
+    }
+    
+    
+    
+    func unwished(newsId: String) {
+        
+        do{
+            try realm.write {
+                let objectsToDelete = realm.objects(EntityFavouriteNewsModel.self).filter("newsId = %@", newsId)
+                realm.delete(objectsToDelete)
+                allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
+            }
+        }catch{
+            print("Error(TopNewsVC) adding to realm")
+        }
+    }
+    
+}
+
+
+
+extension GalleryInsideMediaVC{
+    
+    @objc func refreshButtonClicked(sender: UIButton) {
+        getGalleryNews(true)
+    }
+    
 }

@@ -14,29 +14,43 @@ class MediaNewsVC: SegmentedPagerTabStripViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
-        
-    
     }
     
     override func viewControllers(for pagerTabStripController: PagerTabStripViewController) -> [UIViewController] {
         let sb = UIStoryboard(name: "Main", bundle: nil)
-        let audioController = sb.instantiateViewController(withIdentifier: "audioInsideMediaVC")
+//        let audioController = sb.instantiateViewController(withIdentifier: "audioInsideMediaVC")
         let videoController = sb.instantiateViewController(withIdentifier: "videoInsideMediaVC")
         let galleryController = sb.instantiateViewController(withIdentifier: "galleryInsideMediaVC")
         
-        return [audioController, videoController, galleryController]
-//          return [AudioInsideMediaVC(), VideoInsideMediaVC(), GalleryInsideMediaVC()]
+        return [videoController, galleryController]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+        changeLanguage()
     }
 
-    /*
-    // MARK: - Navigation
+}
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+
+extension MediaNewsVC{
+    func changeLanguage(){
+        let currentIndex = segmentedControl.selectedSegmentIndex
+        if currentIndex == 0, let vc = viewControllers[currentIndex] as? VideoInsideMediaVC{
+            if vc.isViewLoaded{
+                vc.reload()
+            }
+            
+        }
+        
+        else if currentIndex == 1, let vc = viewControllers[currentIndex] as? GalleryInsideMediaVC{
+            if vc.isViewLoaded{
+                vc.reload()
+            }
+        }
+        
+        segmentedControl.setTitle(LanguageHelper.getString(stringId: .tab_video), forSegmentAt: 0)
+        segmentedControl.setTitle(LanguageHelper.getString(stringId: .tab_gallery), forSegmentAt: 1)
     }
-    */
-
+    
 }

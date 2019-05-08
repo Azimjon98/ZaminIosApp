@@ -22,13 +22,14 @@
                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="top" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="ZXr-0U-h2C" userLabel="titleStack">
                         <rect key="frame" x="15" y="15" width="364" height="70.5"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="music_icon_inactive" translatesAutoresizingMaskIntoConstraints="NO" id="TJf-1W-fbq">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ajt-fa-lzf">
                                 <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="40" id="1e2-1l-OE6"/>
-                                    <constraint firstAttribute="height" constant="40" id="vQ2-qP-H2s"/>
+                                    <constraint firstAttribute="width" constant="40" id="4dN-R9-DiZ"/>
+                                    <constraint firstAttribute="height" constant="40" id="noN-9p-fCK"/>
                                 </constraints>
-                            </imageView>
+                                <state key="normal" image="music_icon_inactive"/>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bte-Z2-uaq">
                                 <rect key="frame" x="55" y="0.0" width="309" height="20"/>
                                 <attributedString key="attributedText">
@@ -48,16 +49,14 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="otV-ce-Dtp" userLabel="additionalView">
                         <rect key="frame" x="70" y="100.5" width="309" height="24"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9:05 • 19 март 2019 • " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQ7-x3-vKB">
-                                <rect key="frame" x="0.0" y="0.0" width="146" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9:05 •" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZQ7-x3-vKB">
+                                <rect key="frame" x="0.0" y="3.5" width="40.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.61960784310000006" green="0.61960784310000006" blue="0.61960784310000006" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i79-Fs-P1R">
-                                <rect key="frame" x="146" y="0.0" width="79" height="24"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ўзбекистон" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i79-Fs-P1R">
+                                <rect key="frame" x="40.5" y="3.5" width="78.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.82745098039999998" green="0.1843137255" blue="0.1843137255" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <nil key="highlightedColor"/>
@@ -65,7 +64,11 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="ZQ7-x3-vKB" firstAttribute="leading" secondItem="otV-ce-Dtp" secondAttribute="leading" id="7j1-Su-dQ5"/>
+                            <constraint firstItem="i79-Fs-P1R" firstAttribute="leading" secondItem="ZQ7-x3-vKB" secondAttribute="trailing" id="Cff-EN-fnB"/>
                             <constraint firstAttribute="height" constant="24" id="MJp-DQ-meg"/>
+                            <constraint firstItem="i79-Fs-P1R" firstAttribute="centerY" secondItem="otV-ce-Dtp" secondAttribute="centerY" id="aVI-rG-DCh"/>
+                            <constraint firstItem="ZQ7-x3-vKB" firstAttribute="centerY" secondItem="otV-ce-Dtp" secondAttribute="centerY" id="eD6-RP-xUQ"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3qc-Fs-rO1" userLabel="line">
@@ -91,7 +94,10 @@
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
+                <outlet property="categoryLabel" destination="i79-Fs-P1R" id="PSZ-CO-had"/>
+                <outlet property="dateLabel" destination="ZQ7-x3-vKB" id="g10-Wy-hyb"/>
                 <outlet property="label" destination="bte-Z2-uaq" id="Q9L-rU-cup"/>
+                <outlet property="playerButton" destination="Ajt-fa-lzf" id="uro-jx-Q3D"/>
             </connections>
             <point key="canvasLocation" x="123.18840579710145" y="120.87053571428571"/>
         </tableViewCell>

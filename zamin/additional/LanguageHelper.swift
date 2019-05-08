@@ -13,142 +13,276 @@ final class LanguageHelper {
     
     static let shared = LanguageHelper()
     
-    func getLang(){
-        UserDefaults.standard.string(forKey: Constants.KEY_LANG)
+    static func apiLang() -> String{
+        let currentLocale = UserDefaults.getLocale()
+        if currentLocale == "uz" {return "oz"}
+        else if currentLocale == "kr" {return "uz"}
+        
+        else { return "oz" }
     }
     
-    let monthsUZ: [String] =
-        [
-            "Yanvar",
-            "Fevral",
-            "Mart",
-            "Aprel",
-            "May",
-            "Iyun",
-            "Iyul",
-            "Avgust",
-            "Sentabr",
-            "Oktabr",
-            "Noyabr",
-            "Dekabr"
-        ]
-    let monthsKR: [String] =
-        [
-            "Январ",
-            "Феврал",
-            "Март",
-            "Апрел",
-            "Май",
-            "Июн",
-            "Июл",
-            "Август",
-            "Сентабр",
-            "Октабр",
-            "Ноябр",
-            "Декабр"
-    ]
-    enum ADw{
-        case a
+    static func getString(stringId: StringsId) -> String{
+        let lang = UserDefaults.getLocale()
+        
+        if lang == "uz" {
+            return StringUZ.getString(id: stringId)
+        }
+        else if lang == "kr"{
+            return StringKR.getString(id: stringId)
+        }
+        
+        
+        return ""
     }
+    
+    static func getArray(arrayId: ArraysId) -> [String]{
+        let lang = UserDefaults.getLocale()
+        
+        if lang == "uz" {
+            return ArrayUZ.getArray(id: arrayId)
+        }
+        else if lang == "kr"{
+            return ArrayKR.getArray(id: arrayId)
+        }
+        
+        
+        return [""]
+    }
+    
+    enum ArraysId{
+        
+        case months
+        case week_days
+        
+    }
+    
+    enum StringsId{
+        
+        case menu_news_feed
+        case menu_top
+        case menu_favourites
+        case menu_media
+        case text_news
+        case text_choose_language
+        case text_back
+        case text_submit
+        case message_no_connection
+        case title_audio_news
+        case messege_audio
+        case title_favourites
+        case message_favourites
+        case title_foto
+        case message_foto
+        case text_last_news
+        case text_main_news
+        case text_audio_news2
+        case text_all
+        case text_video_news
+        case title_video_news
+        case message_video
+        case tab_audio
+        case tab_video
+        case tab_gallery
+        case toolbar_profile
+        case text_notification
+        case text_categories
+        case text_select_language
+        case language
+        case text_results
+        case title_select_categories
+        case today
+        case text_share
+        case text_no_connection
+        case check_the_connection
+        case text_no_favourites
+        case text_no_audio
+        case text_registration
+        case text_no_item
+        case text_refresh
+        
+    }
+    
+    
+  
+    
 
-    enum UZStrings : String{
+    
+    
+    
+}
 
+
+
+
+
+extension LanguageHelper{
+    
+    //MARK: - Strings
+    struct StringUZ {
+        static func getString(id: StringsId) -> String{
+            switch id {
+                
+            case StringsId.menu_news_feed: return "Lenta"
+            case StringsId.menu_top: return "Top"
+            case StringsId.menu_favourites: return "Tanlanganlar"
+            case StringsId.menu_media: return "Media"
+            case StringsId.text_news: return "Qidirish"
+            case StringsId.text_choose_language: return "Tilni tanlang"
+            case StringsId.text_back: return "Ortga"
+            case StringsId.text_submit: return "Tanlash"
+            case StringsId.message_no_connection: return "Internetga ulanishning iloji yo\'q"
+            case StringsId.title_audio_news: return "Audio xabarlar"
+            case StringsId.messege_audio: return "O\'zbekistonda va jahonda bo\'layotgan voqealarning audio xabarlari"
+            case StringsId.title_favourites: return "Sizning xabarlaringiz"
+            case StringsId.message_favourites: return "Zamin siz uchun muhim xabarlarni saqlab turadi"
+            case StringsId.title_foto: return "Foto kolleksiya"
+            case StringsId.message_foto: return "O\'zbekistonda va jahonda bo\'layotgan voqealarning foto jamlanmasi"
+            case StringsId.text_last_news: return "So\'nggi yangiliklar"
+            case StringsId.text_main_news: return "Asosiy yangiliklar"
+            case StringsId.text_audio_news2: return "Audio yangiliklar"
+            case StringsId.text_all: return "Barchasi"
+            case StringsId.text_video_news: return "Video yangiliklar"
+            case StringsId.title_video_news: return "Video xabarlar"
+            case StringsId.message_video: return "Zamin studiyasining dolzarb mavzudagi intervyulari"
+            case StringsId.tab_audio: return "Audio"
+            case StringsId.tab_video: return "Video"
+            case StringsId.tab_gallery: return "Galereya"
+            case StringsId.toolbar_profile: return "Profil"
+            case StringsId.text_notification: return "Bildirishlar"
+            case StringsId.text_categories: return "Ruknlar"
+            case StringsId.text_select_language: return "Tilni tanlash"
+            case StringsId.language: return "O\'zbek"
+            case StringsId.text_results: return "qidiruv natijalari"
+            case StringsId.title_select_categories: return "Kategoriyalarni tanlang"
+            case StringsId.today: return "Bugun"
+            case StringsId.text_share: return "Yangilikni ulashish"
+            case StringsId.text_no_connection: return "Tilni o\'zgartirish uchun internetga ulaning"
+            case StringsId.check_the_connection: return "Internetga ulanganingizni tekshirib ko\'ring"
+            case StringsId.text_no_favourites: return "Saqlangan xabarlar topilmadi"
+            case StringsId.text_no_audio: return "Audio xabarlar topilmadi"
+            case StringsId.text_registration: return "Ro\'yxatdan o\'tish"
+            case StringsId.text_no_item: return "Yangiliklar topilmadi"
+            case StringsId.text_refresh: return "Takrorlash"
+                
+            }
+            
+        }
         
-        case menu_news_feed = "Lenta"
-        case menu_top = "Top"
-        case menu_favourites = "Tanlanganlar"
-        case menu_media = "Media"
-        case text_news = "Yangiliklar"
-        case text_choose_language = "Tilni tanlang"
-        case text_back = "Ortga"
-        case text_submit = "Tanlash"
-        case message_no_connection = "Internetga ulanishning iloji yo\'q"
-        case title_audio_news = "Audio xabarlar"
-        case messege_audio = "O\'zbekistonda va jahonda bo\'layotgan voqealarning audio xabarlari"
-        case title_favourites = "Sizning xabarlaringiz"
-        case message_favourites = "Zamin siz uchun muhim xabarlarni saqlab turadi"
-        case title_foto = "Foto kolleksiya"
-        case message_foto = "O\'zbekistonda va jahonda bo\'layotgan voqealarning foto jamlanmasi"
-        case text_last_news = "So\'nggi yangiliklar"
-        case text_main_news = "Asosiy yangiliklar"
-        case text_audio_news2 = "Audio yangiliklar"
-        case text_all = "Barchasi"
-        case text_video_news = "Video yangiliklar"
-        case title_video_news = "Video xabarlar"
-        case message_video = "Zamin studiyasining dolzarb mavzudagi intervyulari"
-        case tab_audio = "Audio"
-        case tab_video = "Video"
-        case tab_gallery = "Galereya"
-        case toolbar_profile = "Profil"
-        case text_notification = "Bildirishlar"
-        case text_categories = "Ruknlar"
-        case text_select_language = "Tilni tanlash"
-        case language = "O\'zbek"
-        case text_results = "qidiruv natijalari"
-        case title_select_categories = "Kategoriyalarni tanlang"
-        case today = "Bugun"
-        case text_share = "Yangilikni ulashish"
-        case text_no_connection = "Tilni o\'zgartirish uchun internetga ulaning"
-        case check_the_connection = "Internetga ulanganingizni tekshirib ko\'ring"
-        case text_no_favourites = "Saqlangan xabarlar topilmadi"
-        case text_no_audio = "Audio xabarlar topilmadi"
-        case text_registration = "Ro\'yxatdan o\'tish"
-        
-        
-        func toString() -> String {
-            return self.rawValue
+    }
+    
+    struct StringKR {
+        static func getString(id: StringsId) -> String{
+            switch id {
+                
+                
+            case StringsId.menu_news_feed: return "Лента"
+            case StringsId.menu_top: return "Топ"
+            case StringsId.menu_favourites: return "Танланганлар"
+            case StringsId.menu_media: return "Медиа"
+            case StringsId.text_news: return "Қидириш"
+            case StringsId.text_choose_language: return "Тилни танланг"
+            case StringsId.text_back: return "Ортга"
+            case StringsId.text_submit: return "Танлаш"
+            case StringsId.message_no_connection: return "Интернетга уланишнинг иложи йўқ"
+            case StringsId.title_audio_news: return "Аудио хабарлар"
+            case StringsId.messege_audio: return "Ўзбекистонда ва жаҳонда бўлаётган воқеаларнинг аудио хабарлари"
+            case StringsId.title_favourites: return "Сизнинг хабарларингиз"
+            case StringsId.message_favourites: return "Замин сиз учун муҳим хабарларни сақлаб туради"
+            case StringsId.title_foto: return "Фото коллексия"
+            case StringsId.message_foto: return "Ўзбекистонда ва жаҳонда бўлаётган воқеаларнинг фото жамланмаси"
+            case StringsId.text_last_news: return "Сўнгги янгиликлар"
+            case StringsId.text_main_news: return "Асосий янгиликлар"
+            case StringsId.text_audio_news2: return "Аудио янгиликлар"
+            case StringsId.text_all: return "Барчаси"
+            case StringsId.text_video_news: return "Видео янгиликлар"
+            case StringsId.title_video_news: return "Видео хабарлар"
+            case StringsId.message_video: return "Замин студиясининг долзарб мавзудаги интервюлари"
+            case StringsId.tab_audio: return "Аудио"
+            case StringsId.tab_video: return "Видео"
+            case StringsId.tab_gallery: return "Галерея"
+            case StringsId.toolbar_profile: return "Профил"
+            case StringsId.text_notification: return "Билдиришлар"
+            case StringsId.text_categories: return "Рукнлар"
+            case StringsId.text_select_language: return "Тилни танлаш"
+            case StringsId.language: return "Ўзбек"
+            case StringsId.text_results: return "қидирув натижалари"
+            case StringsId.title_select_categories: return "Категорияларни танланг"
+            case StringsId.today: return "Бугун"
+            case StringsId.text_no_connection: return "Tilni o\'zgartirish uchun internetga ulaning"
+            case StringsId.check_the_connection: return "Internetga ulanganingizni tekshirib ko\'ring"
+            case StringsId.text_share: return "Янгиликларни улашиш"
+            case StringsId.text_no_favourites: return "Сақланган хабарлар топилмади"
+            case StringsId.text_no_audio: return "Аудио хабарлар топилмади"
+            case StringsId.text_registration: return "Рўйхатдан ўтиш"
+            case StringsId.text_no_item: return "Янгиликлар топилмади"
+            case StringsId.text_refresh: return "Такрорлаш"
+                
+            }
+            
         }
     }
     
-    enum KRStrings : String {
-        case menu_news_feed = "Лента"
-        case menu_top = "Топ"
-        case menu_favourites = "Танланганлар"
-        case menu_media = "Медиа"
-        case text_news = "Янгиликлар"
-        case text_choose_language = "Тилни танланг"
-        case text_back = "Ортга"
-        case text_submit = "Танлаш"
-        case message_no_connection = "Интернетга уланишнинг иложи йўқ"
-        case title_audio_news = "Аудио хабарлар"
-        case messege_audio = "Ўзбекистонда ва жаҳонда бўлаётган воқеаларнинг аудио хабарлари"
-        case title_favourites = "Сизнинг хабарларингиз"
-        case message_favourites = "Замин сиз учун муҳим хабарларни сақлаб туради"
-        case title_foto = "Фото коллексия"
-        case message_foto = "Ўзбекистонда ва жаҳонда бўлаётган воқеаларнинг фото жамланмаси"
-        case text_last_news = "Сўнгги янгиликлар"
-        case text_main_news = "Асосий янгиликлар"
-        case text_audio_news2 = "Аудио янгиликлар"
-        case text_all = "Барчаси"
-        case text_video_news = "Видео янгиликлар"
-        case title_video_news = "Видео хабарлар"
-        case message_video = "Замин студиясининг долзарб мавзудаги интервюлари"
-        case tab_audio = "Аудио"
-        case tab_video = "Видео"
-        case tab_gallery = "Галерея"
-        case toolbar_profile = "Профил"
-        case text_notification = "Билдиришлар"
-        case text_categories = "Рукнлар"
-        case text_select_language = "Тилни танлаш"
-        case language = "Ўзбек"
-        case text_results = "қидирув натижалари"
-        case title_select_categories = "Категорияларни танланг"
-        case today = "Бугун"
-        case text_no_connection = "Tilni o\'zgartirish uchun internetga ulaning"
-        case check_the_connection = "Internetga ulanganingizni tekshirib ko\'ring"
-        case text_share = "Янгиликларни улашиш"
-        case text_no_favourites = "Сақланган хабарлар топилмади"
-        case text_no_audio = "Аудио хабарлар топилмади"
-        case text_registration = "Рўйхатдан ўтиш"
-        
-        func toString() -> String {
-            return self.rawValue
+    
+    
+}
+
+
+
+
+
+
+
+
+extension LanguageHelper{
+    //MARK: - Arrays
+    struct ArrayUZ {
+        static func getArray(id: ArraysId) -> [String]{
+            switch id {
+            case .months: return
+                [
+                    "Yanvar",
+                    "Fevral",
+                    "Mart",
+                    "Aprel",
+                    "May",
+                    "Iyun",
+                    "Iyul",
+                    "Avgust",
+                    "Sentabr",
+                    "Oktabr",
+                    "Noyabr",
+                    "Dekabr"
+                ]
+                
+            case .week_days: return
+                [""]
+            }
         }
     }
     
-
-
-    
-    
+    struct ArrayKR {
+        static func getArray(id: ArraysId) -> [String]{
+            switch id {
+            case .months: return
+                [
+                    "Январ",
+                    "Феврал",
+                    "Март",
+                    "Апрел",
+                    "Май",
+                    "Июн",
+                    "Июл",
+                    "Август",
+                    "Сентабр",
+                    "Октабр",
+                    "Ноябр",
+                    "Декабр"
+                ]
+                
+            case .week_days: return
+                [""]
+            }
+        }
+    }
     
 }

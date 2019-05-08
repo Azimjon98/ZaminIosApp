@@ -10,7 +10,6 @@ import UIKit
 import SDWebImage
 
 class GalleryNewsCell: UITableViewCell {
-    var model : SimpleNewsModel?
     
     @IBOutlet weak var firstPhoto: UIImageView!
     @IBOutlet weak var secondPhoto: UIImageView!
@@ -18,6 +17,38 @@ class GalleryNewsCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var bookmarkButton: UIButton!
+    
+    var delegate : MyWishListDelegate?
+    
+    var model : SimpleNewsModel!{
+        didSet{
+            firstPhoto.load(url: model.galleryImages[0] ?? "")
+            secondPhoto.load(url: model.galleryImages[1] ?? "")
+            thirdPhoto.load(url: model.galleryImages[2] ?? "")
+            titleLabel.attributedText = String.myTitleAttributedString(text: model.title)
+            dateLabel.text = String.parseMyDate(date: model.date)
+            categoryLabel.text = model.categoryName
+            bookmarkButton.setImage(
+                model.isWished ? UIImage(named: "bookmark_active") : UIImage(named: "bookmark_inactive")
+                , for: .normal)
+            
+            //            print("before Pressed")
+            bookmarkButton.addTarget(self, action: #selector(bookmarkPressed), for: .touchUpInside)
+            bookmarkButton.tag = 1
+            
+        }
+    }
+    
+    func bookItem(){
+        model.isWished = true
+        bookmarkButton.setImage( UIImage(named: "bookmark_active"), for: .normal)
+    }
+    
+    func unbookItem(){
+        model.isWished = false
+        bookmarkButton.setImage( UIImage(named: "bookmark_inactive"), for: .normal)
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,22 +56,22 @@ class GalleryNewsCell: UITableViewCell {
 
     }
     
-    @IBAction func bookmarkPressed(_ sender: Any) {
-    }
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
-    func updateItem(m: SimpleNewsModel){
-        self.model = m
+    @objc func bookmarkPressed(sender: UIButton!){
         
-        firstPhoto?.sd_setImage(with:URL(string: model!.imageUrl), completed: nil)
-        titleLabel.text = model!.title
-        dateLabel.text = String.parseMyDate(date: model!.date)
-        categoryLabel.text = String.parseMyCategoryName(id: model!.categoryId)
+        if  sender.tag == 1{
+            model.isWished = !model.isWished
+            if model.isWished{
+                delegate?.wished(model: model)
+                bookmarkButton.setImage(UIImage(named: "bookmark_active"), for: .normal)
+                
+            } else{
+                delegate?.unwished(newsId: model.newsId)
+                bookmarkButton.setImage(UIImage(named: "bookmark_inactive"), for: .normal)
+                
+            }
+            
+        }
     }
     
 }

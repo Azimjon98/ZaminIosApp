@@ -18,7 +18,11 @@ class TabBarVC: UITabBarController {
 
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        self.navigationController?.hidesBarsOnSwipe = true
+
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        changeLanguage()
     }
     
     @IBAction func searchPressed(_ sender: Any) {
@@ -28,14 +32,24 @@ class TabBarVC: UITabBarController {
     @IBAction func profilePressed(_ sender: Any) {
         self.performSegue(withIdentifier: "profilePressed", sender: self)
     }
-    /*
-    // MARK: - Navigation
+    
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+}
+
+
+
+extension TabBarVC{
+    
+    func changeLanguage(){
+        //hack for updating child VCs
+        let currentIndex = self.selectedIndex
+        self.selectedIndex = abs(1 - currentIndex)
+        self.selectedIndex = abs(currentIndex)
+        
+        tabBar.items?[0].title = LanguageHelper.getString(stringId: .menu_news_feed)
+        tabBar.items?[1].title = LanguageHelper.getString(stringId: .menu_top)
+        tabBar.items?[2].title = LanguageHelper.getString(stringId: .menu_favourites)
+        tabBar.items?[3].title = LanguageHelper.getString(stringId: .menu_media)
+        
     }
-    */
-
 }
