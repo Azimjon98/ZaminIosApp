@@ -24,7 +24,8 @@ class ContentWebViewTableCell: UITableViewCell, WKNavigationDelegate, WKUIDelega
             
 //            let myUrl = URL(string: "http://kun.uz")
             let myUrl = URL(string: contentUrl)
-            let myRequest = URLRequest(url: myUrl!)
+            var myRequest = URLRequest(url: myUrl!)
+            myRequest.cachePolicy = URLRequest.CachePolicy.returnCacheDataElseLoad
             webView.load(myRequest)
         }
     }

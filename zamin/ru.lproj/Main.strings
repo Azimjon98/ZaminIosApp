@@ -1,0 +1,96 @@
+
+/* Class = "UILabel"; text = "Сизнинг хабарларингиз"; ObjectID = "1PD-qK-a0W"; */
+"1PD-qK-a0W.text" = "Сизнинг хабарларингиз";
+
+/* Class = "UILabel"; text = "O'zbek"; ObjectID = "4oB-86-PZC"; */
+"4oB-86-PZC.text" = "O'zbek";
+
+/* Class = "UILabel"; text = "Видео хабарлар"; ObjectID = "5Uh-NX-HFZ"; */
+"5Uh-NX-HFZ.text" = "Видео хабарлар";
+
+/* Class = "UITabBarItem"; title = "Top"; ObjectID = "8Dg-Iw-l0I"; */
+"8Dg-Iw-l0I.title" = "Top";
+
+/* Class = "UILabel"; text = "Ruknlar"; ObjectID = "9xR-Sh-E8a"; */
+"9xR-Sh-E8a.text" = "Ruknlar";
+
+/* Class = "UILabel"; text = "123"; ObjectID = "B8i-7y-i2w"; */
+"B8i-7y-i2w.text" = "123";
+
+/* Class = "UILabel"; text = "Zamin сиз учун мухим хабарларни сақлаб туради "; ObjectID = "BNF-Wi-Ug3"; */
+"BNF-Wi-Ug3.text" = "Zamin сиз учун мухим хабарларни сақлаб туради ";
+
+/* Class = "UITabBarItem"; title = "Media"; ObjectID = "Bx2-90-elu"; */
+"Bx2-90-elu.title" = "Media";
+
+/* Class = "UISegmentedControl"; C2d-c3-UC2.segmentTitles[0] = "Audio"; ObjectID = "C2d-c3-UC2"; */
+"C2d-c3-UC2.segmentTitles[0]" = "Audio";
+
+/* Class = "UISegmentedControl"; C2d-c3-UC2.segmentTitles[1] = "Video"; ObjectID = "C2d-c3-UC2"; */
+"C2d-c3-UC2.segmentTitles[1]" = "Video";
+
+/* Class = "UISegmentedControl"; C2d-c3-UC2.segmentTitles[2] = "Galereya"; ObjectID = "C2d-c3-UC2"; */
+"C2d-c3-UC2.segmentTitles[2]" = "Galereya";
+
+/* Class = "UIButton"; normalTitle = "Barchasi"; ObjectID = "DdH-wq-MM2"; */
+"DdH-wq-MM2.normalTitle" = "Barchasi";
+
+/* Class = "UILabel"; text = "O'zbekiston, Hayot tarzi..."; ObjectID = "DpW-pN-WGh"; */
+"DpW-pN-WGh.text" = "O'zbekiston, Hayot tarzi...";
+
+/* Class = "UITabBarItem"; title = "Tanlanganlar"; ObjectID = "FsX-Tt-hS4"; */
+"FsX-Tt-hS4.title" = "Tanlanganlar";
+
+/* Class = "UILabel"; text = "Замин студиясининг долзарб мавзулардаги интервьюлари"; ObjectID = "Hea-lU-u0t"; */
+"Hea-lU-u0t.text" = "Замин студиясининг долзарб мавзулардаги интервьюлари";
+
+/* Class = "UILabel"; text = "Сўнги янгиликлар"; ObjectID = "JjG-pG-L2s"; */
+"JjG-pG-L2s.text" = "Сўнги янгиликлар";
+
+/* Class = "UILabel"; text = "Фото коллекция"; ObjectID = "K7m-sU-qGS"; */
+"K7m-sU-qGS.text" = "Фото коллекция";
+
+/* Class = "UILabel"; text = "17:10 • 19 Aprel 2019 • "; ObjectID = "OaW-nF-1qJ"; */
+"OaW-nF-1qJ.text" = "17:10 • 19 Aprel 2019 • ";
+
+/* Class = "UILabel"; text = "Bildirishlar"; ObjectID = "Pxw-z7-Py0"; */
+"Pxw-z7-Py0.text" = "Bildirishlar";
+
+/* Class = "UILabel"; text = "Tilni tanlash"; ObjectID = "Qfy-7f-xVd"; */
+"Qfy-7f-xVd.text" = "Tilni tanlash";
+
+/* Class = "UILabel"; text = "Ўзбекистон"; ObjectID = "bVf-fT-ktH"; */
+"bVf-fT-ktH.text" = "Ўзбекистон";
+
+/* Class = "UILabel"; text = "Ro'yxatdan o'tish"; ObjectID = "etM-bw-8FA"; */
+"etM-bw-8FA.text" = "Ro'yxatdan o'tish";
+
+/* Class = "UILabel"; text = "Ўзбекистонда ва жахонда бўлаётган воқеаларнинг фото жамлаемаси"; ObjectID = "hsd-KX-GSH"; */
+"hsd-KX-GSH.text" = "Ўзбекистонда ва жахонда бўлаётган воқеаларнинг фото жамлаемаси";
+
+/* Class = "UILabel"; text = "Ўзбекистонда ва жахонда бўлаётган воқеаларнинг аудио хабарлари"; ObjectID = "i44-7Q-GXA"; */
+"i44-7Q-GXA.text" = "Ўзбекистонда ва жахонда бўлаётган воқеаларнинг аудио хабарлари";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "kom-wh-q3R"; */
+"kom-wh-q3R.text" = "Label";
+
+/* Class = "UITabBarItem"; title = "Lenta"; ObjectID = "oMb-Zp-YCc"; */
+"oMb-Zp-YCc.title" = "Lenta";
+
+/* Class = "UILabel"; text = "Сўнги янгиликлар"; ObjectID = "oTb-Qi-1TN"; */
+"oTb-Qi-1TN.text" = "Сўнги янгиликлар";
+
+/* Class = "UISearchBar"; placeholder = "Yangiliklar"; ObjectID = "oiD-Iy-Dij"; */
+"oiD-Iy-Dij.placeholder" = "Yangiliklar";
+
+/* Class = "UILabel"; text = "Аудио хабарлар"; ObjectID = "oln-Zj-8F9"; */
+"oln-Zj-8F9.text" = "Аудио хабарлар";
+
+/* Class = "UILabel"; text = "Видео янгиликлар"; ObjectID = "oyX-Yg-3UX"; */
+"oyX-Yg-3UX.text" = "Видео янгиликлар";
+
+/* Class = "UILabel"; text = "Асосий янгиклар"; ObjectID = "tIo-BZ-cmh"; */
+"tIo-BZ-cmh.text" = "Асосий янгиклар";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "w0k-TI-nVB"; */
+"w0k-TI-nVB.text" = "Title";

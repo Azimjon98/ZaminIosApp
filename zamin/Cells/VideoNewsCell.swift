@@ -19,7 +19,7 @@ class VideoNewsCell: UITableViewCell {
     
     var model : SimpleNewsModel!{
         didSet{
-            baseImageView.load(url: model.imageUrl)
+            baseImageView.load(url: model.imageUrl, withQuality: .medium)
             titleLabel.attributedText = String.myTitleAttributedString(text: model.title)
             dateLabel.text = String.parseMyDate(date: model.date)
             categoryLabel.text = model.categoryName

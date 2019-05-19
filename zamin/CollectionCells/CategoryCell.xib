@@ -22,7 +22,7 @@
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WQn-kz-GZw" userLabel="baseLay">
                         <rect key="frame" x="0.0" y="10" width="104" height="48"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="photo_2018-05-08_20-49-44" translatesAutoresizingMaskIntoConstraints="NO" id="dZw-3m-SeV">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="image_category" translatesAutoresizingMaskIntoConstraints="NO" id="dZw-3m-SeV">
                                 <rect key="frame" x="0.0" y="0.0" width="104" height="48"/>
                             </imageView>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XdL-oM-ALE">
@@ -79,6 +79,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="photo_2018-05-08_20-49-44" width="720" height="1280"/>
+        <image name="image_category" width="200" height="356"/>
     </resources>
 </document>

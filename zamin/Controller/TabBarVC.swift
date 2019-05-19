@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SVProgressHUD
 
 class TabBarVC: UITabBarController {
 
@@ -23,6 +24,7 @@ class TabBarVC: UITabBarController {
     
     override func viewWillAppear(_ animated: Bool) {
         changeLanguage()
+        SVProgressHUD.dismiss()
     }
     
     @IBAction func searchPressed(_ sender: Any) {

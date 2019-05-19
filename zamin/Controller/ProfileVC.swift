@@ -27,6 +27,7 @@ class ProfileVC: UIViewController {
     @IBOutlet weak var img: UIImageView!
     @IBOutlet weak var img2: UIImageView!
     @IBOutlet weak var img3: UIImageView!
+    @IBOutlet weak var notificationSwitch: UISwitch!
     
     let realm = try! Realm()
     
@@ -45,6 +46,10 @@ class ProfileVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         changeLanguage()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        UserDefaults.setNotificationEnabled(notificationSwitch.isOn)
     }
 
     
@@ -86,48 +91,50 @@ class ProfileVC: UIViewController {
         if locale == "uz" {lang =  "oz"}
         else if locale == "kr" {lang = "uz"}
         
-        Alamofire.request(Constants.URL_CATEGORIES,
+        let req = Alamofire.request(Constants.URL_CATEGORIES,
                           method: .get,
                           parameters: ApiHelper.getAllCategories(lang!))
-            .responseJSON {
-                response in
+        req.responseJSON {
+            response in
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo: nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    
-                    var categories: [EntityCategoryModel] = [EntityCategoryModel]()
-                    for i in data.arrayValue{
-                        categories.append(EntityCategoryModel.parse(json: i))
-                    }
-                    
-                    do{
-                        try self.realm.write {
-                            //save old categoires isEnabled State
-                            let oldCategories: Results<EntityCategoryModel> = self.realm.objects(EntityCategoryModel.self)
-                            for old in oldCategories{
-                                for new in categories{
-                                    if old.categoryId == new.categoryId{
-                                        new.isEnabled = old.isEnabled
-                                    }
+                var categories: [EntityCategoryModel] = [EntityCategoryModel]()
+                for i in data.arrayValue{
+                    categories.append(EntityCategoryModel.parse(json: i))
+                }
+                
+                do{
+                    try self.realm.write {
+                        //save old categoires isEnabled State
+                        let oldCategories: Results<EntityCategoryModel> = self.realm.objects(EntityCategoryModel.self)
+                        for old in oldCategories{
+                            for new in categories{
+                                if old.categoryId == new.categoryId{
+                                    new.isEnabled = old.isEnabled
                                 }
                             }
-                            
-                            self.realm.delete(self.realm.objects(EntityCategoryModel.self))
-                            self.realm.add(categories)
-                            self.successfullyChanged(locale)
                         }
                         
-                    }catch{
-                        print("ErrorPassingCategories: \(error)")
-                        self.presentAlert(message: LanguageHelper.getString(stringId: .text_no_connection))
-                        SVProgressHUD.dismiss()
+                        self.realm.delete(self.realm.objects(EntityCategoryModel.self))
+                        self.realm.add(categories)
+                        self.successfullyChanged(locale)
                     }
                     
-                }else{
-                    print("ErrorParsingCategories: " + String(describing: response.result.error))
+                }catch{
+                    print("ErrorPassingCategories: \(error)")
                     self.presentAlert(message: LanguageHelper.getString(stringId: .text_no_connection))
                     SVProgressHUD.dismiss()
                 }
+                
+            }else{
+                print("ErrorParsingCategories: " + String(describing: response.result.error))
+                self.presentAlert(message: LanguageHelper.getString(stringId: .text_no_connection))
+                SVProgressHUD.dismiss()
+            }
                 
         }
         
@@ -159,7 +166,7 @@ extension ProfileVC{
         textCategories.text = LanguageHelper.getString(stringId: .text_categories)
         textLanguage.text = LanguageHelper.getString(stringId: .text_choose_language)
         textCurrentLanguage.text = LanguageHelper.getString(stringId: .language)
-        
+        notificationSwitch.setOn(UserDefaults.getNotificationEnabled(), animated: true)
     
         let enabledCategories = realm.objects(EntityCategoryModel.self).filter("isEnabled = true")
         var categoriesList = ""

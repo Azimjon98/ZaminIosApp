@@ -74,8 +74,8 @@ extension SearchNewsVC{
             
             if response.result.isSuccess{
                 let data : JSON = JSON(response.result.value!)
-                self.parseNews(data)
                 
+                self.parseNews(data)
                 self.offset += 1
             }else{
                 print("Error: " + String(describing: response.result.error))

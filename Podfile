@@ -14,5 +14,5 @@ target 'zamin' do
     pod 'SDWebImage', '~> 5.0.1'
     pod 'RealmSwift'
     pod 'XLPagerTabStrip'
-
+    pod 'TagCellLayout', :git => 'https://github.com/riteshhgupta/TagCellLayout.git'
 end

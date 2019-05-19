@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Error inplementing Realm: \(error)")
         }
         
+        
         FirebaseApp.configure()
         return true
     }

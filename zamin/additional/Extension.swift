@@ -48,31 +48,22 @@ extension String{
     
 }
 
+enum ImageQuality{
+    case original
+    case medium
+    case small
+}
+
 extension UIImageView{
-    func load(url: String,withFixedSide: Bool = false) -> Void{
-        if !withFixedSide{
+    func load(url: String,withQuality: ImageQuality = .original, withFixedSide: Bool = false) -> Void{
+        
+        if withQuality == .original{
             self.sd_setImage(with:URL(string: url), placeholderImage: UIImage(named: "empty_medium"))
-        }else{
-            self.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named: "empty_medium"), options: .highPriority, completed: {
-                (image, error, cacheType, url) in
-                
-                if error == nil, image != nil{
-                    let imageWidth = image?.size.width
-                    let imageHeight = image?.size.height
-                    let ratio = imageHeight! / imageWidth!
-                    print("loadImage: \(imageHeight)   \(imageWidth)")
-                    print("loadImage: \(self.frame.height)   \(self.frame.width)")
-                    print("loadImage: \(ratio)")
-                    
-                    self.frame = CGRect(x: self.frame.origin.x, y: self.frame.origin.y, width: self.frame.width, height: self.frame.width * ratio)
-//                    self.contentMode = .scaleAspectFill; // This determines position of image
-                    self.clipsToBounds = true;
-                    print("loadImageAfter: \(self.frame.height)   \(self.frame.width)")
-                }
-            })
+        } else if withQuality == .medium{
+            self.sd_setImage(with:URL(string: url + "&width=300&quality=70"), placeholderImage: UIImage(named: "empty_medium"))
+        }else if withQuality == .small{
+            self.sd_setImage(with:URL(string: url + "&width=300&quality=40"), placeholderImage: UIImage(named: "empty_medium"))
         }
-        
-        
         
     }
     
@@ -136,6 +127,19 @@ extension UserDefaults{
     
     static func setLocale(_ locale: String) {
         UserDefaults.standard.set(locale, forKey: Constants.KEY_LANG)
+    }
+    
+    static func getNotificationEnabled() -> Bool {
+        
+        if let enabled = UserDefaults.standard.object(forKey: Constants.KEY_NOTIFICATION_ENABLED) as? Bool{
+            return enabled
+        }
+        
+        return true
+    }
+    
+    static func setNotificationEnabled(_ state: Bool) {
+        UserDefaults.standard.set(state, forKey: Constants.KEY_NOTIFICATION_ENABLED)
     }
 }
 

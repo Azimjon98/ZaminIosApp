@@ -136,3 +136,16 @@ extension UITableView {
     }
     
 }
+
+
+extension UITableView{
+    
+    func addLoadingFooter(){
+        let spinner = UIActivityIndicatorView(style: .gray)
+        spinner.startAnimating()
+        spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: self.bounds.width, height: CGFloat(44))
+        
+        self.tableFooterView = spinner
+    }
+}
+

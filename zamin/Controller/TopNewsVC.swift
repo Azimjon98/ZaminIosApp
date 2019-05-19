@@ -100,6 +100,9 @@ extension TopNewsVC{
         }
         
         if indexPath.row == items.count - 1{
+            tableView.isScrollEnabled = false
+            tableView.isScrollEnabled = true
+            
             self.getTopNews()
         }
     }
@@ -124,29 +127,39 @@ extension TopNewsVC{
             SVProgressHUD.show()
         }
         
-        Alamofire.request(Constants.BASE_URL,
+        let req = Alamofire.request(Constants.BASE_URL,
                           method: .get,
                           parameters: ApiHelper.getTopNews(offset: offset, limit: limit))
-            .responseJSON {
-                response in
-                SVProgressHUD.dismiss()
+            
+        req.responseJSON {
+            response in
+            SVProgressHUD.dismiss()
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
+                print("\(data)")
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    
-                    self.parseNews(data)
-                    
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo: nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
+                
+                self.parseNews(data)
+                
+                self.offset += 1
+            }else{
+                print("Error(TopNews): GettingLastNews" + String(describing: response.result.error))
+                let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+                
+                if  cachedResponse != nil{
+                    let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+                    self.parseNews(cachedJson)
                     self.offset += 1
-                }else{
-                    print("Error(TopNews): GettingLastNews" + String(describing: response.result.error))
-                    
-                    if self.offset == 1{
-                        self.tableView.setBigEmptyView()
-                        if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
-                            button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
-                        }
+                }else if self.offset == 1{
+                    self.tableView.setBigEmptyView()
+                    if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
+                        button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
                     }
                 }
+            }
                 
         }
         
@@ -158,9 +171,12 @@ extension TopNewsVC{
     //TODO: - PARSING METHODS
     
     func parseNews(_ json: JSON){
-        self.items.append(contentsOf: SimpleNewsModel.parse(json: json) ?? [SimpleNewsModel]())
+        let addingItems = SimpleNewsModel.parse(json: json) ?? [SimpleNewsModel]()
+        self.items.append(contentsOf: addingItems)
         
-        self.tableView.reloadData()
+        if(addingItems.count != 0){
+            self.tableView.reloadData()
+        }
     }
     
 }

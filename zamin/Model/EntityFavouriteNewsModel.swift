@@ -8,6 +8,7 @@
 
 import Foundation
 import RealmSwift
+import SwiftyJSON
 
 class EntityFavouriteNewsModel: Object{
     
@@ -20,7 +21,7 @@ class EntityFavouriteNewsModel: Object{
     @objc dynamic var date: String = "";
     @objc dynamic var isWished : Bool = false;
     
-    
+    @objc dynamic var lastLocale = "uz";
 }
 
 
@@ -37,8 +38,27 @@ extension EntityFavouriteNewsModel{
         model.categoryName = m.categoryName
         model.date = m.date
         model.isWished = m.isWished
+        model.lastLocale = UserDefaults.getLocale()
         
         return model
     }
+    
+    func update(json: JSON){
+
+        if let title = json["title"].string{ self.title = title }
+        self.lastLocale = UserDefaults.getLocale()
+        
+        let categories: Results<EntityCategoryModel> = (try! Realm()).objects(EntityCategoryModel.self)
+        for i in categories{
+            if i.categoryId == self.categoryId{
+                self.categoryName = i.name
+                break
+            }
+        }
+        
+    }
+    
+    
+    
     
 }

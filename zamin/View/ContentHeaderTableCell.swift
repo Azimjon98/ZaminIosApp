@@ -14,7 +14,7 @@ class ContentHeaderTableCell: UITableViewCell{
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var categoryLabel: UILabel!
-    @IBOutlet weak var baseImageView: UIImageView!
+    
     @IBOutlet weak var viewedCountLabel: UILabel!
     @IBOutlet weak var viewedIcon: UIImageView!
     
@@ -26,9 +26,6 @@ class ContentHeaderTableCell: UITableViewCell{
             dateLabel.text = String.parseMyDate(date: model.date)
             categoryLabel.text = model.categoryName
             viewedCountLabel.text = model.viewedCount
-            baseImageView.load(url: model.imageUrl, withFixedSide: true)
-            
-            
         }
     }
     
@@ -45,3 +42,22 @@ class ContentHeaderTableCell: UITableViewCell{
 }
 
 
+class ScaledHeightImageView: UIImageView {
+    
+    override var intrinsicContentSize: CGSize {
+        
+        if let myImage = self.image {
+            let myImageWidth = myImage.size.width
+            let myImageHeight = myImage.size.height
+            let myViewWidth = self.frame.size.width
+            
+            let ratio = myViewWidth/myImageWidth
+            let scaledHeight = myImageHeight * ratio
+            
+            return CGSize(width: myViewWidth, height: scaledHeight)
+        }
+        
+        return CGSize(width: -1.0, height: -1.0)
+    }
+    
+}

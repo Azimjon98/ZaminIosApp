@@ -23,9 +23,9 @@ class GalleryNewsCell: UITableViewCell {
     
     var model : SimpleNewsModel!{
         didSet{
-            firstPhoto.load(url: model.galleryImages[0] ?? "")
-            secondPhoto.load(url: model.galleryImages[1] ?? "")
-            thirdPhoto.load(url: model.galleryImages[2] ?? "")
+            firstPhoto.load(url: model.galleryImages[0] ?? "", withQuality: .medium)
+            secondPhoto.load(url: model.galleryImages[1] ?? "", withQuality: .small)
+            thirdPhoto.load(url: model.galleryImages[2] ?? "", withQuality: .small)
             titleLabel.attributedText = String.myTitleAttributedString(text: model.title)
             dateLabel.text = String.parseMyDate(date: model.date)
             categoryLabel.text = model.categoryName

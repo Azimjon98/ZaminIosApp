@@ -12,6 +12,7 @@ import SwiftyJSON
 import RealmSwift
 import SVProgressHUD
 import WebKit
+import TagCellLayout
 
 class ContentVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
@@ -32,6 +33,7 @@ class ContentVC: UIViewController {
     
     var contentModel : ContentNewsModel!{
         didSet{
+            print("arrayscontentModel")
             self.navigationItem.setRightBarButtonItems([bookmarkButton, shareButton], animated: true)
             self.navigationItem.rightBarButtonItems![0].target = self
             self.navigationItem.rightBarButtonItems![0].action = #selector(bookmarkPressed)
@@ -41,6 +43,8 @@ class ContentVC: UIViewController {
             //find is news wished
             if allIds?.contains(contentModel.newsId) ?? false{
                 contentModel.isWished = true
+            }else{
+                contentModel.isWished = false
             }
             
             if contentModel.isWished{
@@ -71,24 +75,43 @@ class ContentVC: UIViewController {
     var lastNewsItems : [SimpleNewsModel] = [SimpleNewsModel]()
     var tagItems : [TagModel] = [TagModel]()
     
+    var collectionHeight: CGFloat = 36.0
+    
+    var selectedCategoryId : String = "-1"
+    var categoryTitle: String = ""
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("arraysdidLoad")
         
         // Do any additional setup after loading the view.
         tableView.register(UINib(nibName: "MediumNewsCell", bundle: nil), forCellReuseIdentifier: "mediumNewsCell")
         self.navigationItem.largeTitleDisplayMode = .never
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
+        tableView.isPagingEnabled = false
+        tableView.isScrollEnabled = false
         self.startTopProgress(topView: self.view, height: 2, backColor: #colorLiteral(red: 1, green: 0.9333333333, blue: 0.9333333333, alpha: 1), frontColor: #colorLiteral(red: 0.7803921569, green: 0.09803921569, blue: 0.137254902, alpha: 1))
         
         getNewsContent()
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("arraysviewWillAppear")
         allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
         if lastNewsItems.count != 0 {
-            tableView.reloadData()
+            for cell in tableView.visibleCells{
+                if cell is MediumNewsCell{
+                    if let updatingCell = cell as? MediumNewsCell{
+                        if allIds?.contains(updatingCell.model.newsId) ?? false{
+                            updatingCell.bookItem()
+                        } else{
+                            updatingCell.unbookItem()
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -97,6 +120,13 @@ class ContentVC: UIViewController {
             if let destination = segue.destination as? WebViewVC{
                 
                 destination.contentUrl = myContentUrl
+            }
+        }
+        else if segue.identifier == "goToSearchResult"{
+            if let searchResult = segue.destination as? SearchResultVC{
+                searchResult.searchTitle = categoryTitle
+                searchResult.searchingType = .tag
+                searchResult.searchingId = selectedCategoryId
             }
         }
     }
@@ -161,6 +191,16 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
         }
             
         else if indexPath.row == 1{
+            if let cell = tableView.dequeueReusableCell(withIdentifier: "contentImageTableCell", for: indexPath) as? ContentImageTableCell{
+                cell.imageUrl = contentModel.imageUrl
+                cell.baseImageView.isHidden = true
+                cell.selectionStyle = .none
+                
+                return cell
+            }
+        }
+            
+        else if indexPath.row == 2{
             if let cell = tableView.dequeueReusableCell(withIdentifier: "contentWebViewCell", for: indexPath) as? ContentWebViewTableCell{
                 cell.delegate = self
                 cell.selectionStyle = .none
@@ -169,14 +209,16 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
             }
         }
             
-        else if indexPath.row == 2{
+        else if indexPath.row == 3{
             if let cell = tableView.dequeueReusableCell(withIdentifier: "contentTagsCell", for: indexPath) as? ContentTagsTableCell{
-                cell.selectionStyle = .none
+//                let tagCellLayout = TagCellLayout(alignment: .center, delegate: self)
+//                cell.tagsCollection.collectionViewLayout = tagCellLayout
+//                cell.selectionStyle = .none
                 return cell
             }
         }
             
-        else if indexPath.row == 3{
+        else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: "contentSeparatorCell", for: indexPath)
             cell.selectionStyle = .none
             return cell
@@ -184,8 +226,9 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
             
         else {
             if let cell = tableView.dequeueReusableCell(withIdentifier: "mediumNewsCell", for: indexPath) as? MediumNewsCell{
-                cell.model = lastNewsItems[indexPath.item - 4]
+                cell.model = lastNewsItems[indexPath.item - 5]
                 cell.delegate = self
+                print("cellCreated: \(indexPath.row)")
                 
                 return cell
             }
@@ -198,10 +241,10 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
         tableView.deselectRow(at: indexPath, animated: true)
         selectedIndex = indexPath.row
         
-        if indexPath.row >= 4{
+        if indexPath.row >= 5{
             let st = UIStoryboard(name: "Main", bundle: nil)
             if let contentVC: ContentVC = st.instantiateViewController(withIdentifier: "goToContent") as? ContentVC{
-                contentVC.model = lastNewsItems[indexPath.row - 4]
+                contentVC.model = lastNewsItems[indexPath.row - 5]
                 self.navigationController?.pushViewController(contentVC, animated: true)
             }
         }
@@ -215,9 +258,20 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
             } else{
                 cell.unbookItem()
             }
+            print("cellwillDisplay: \(indexPath.row)")
+        }
+            
+        else if cell is ContentImageTableCell {
+            if let cell = cell as? ContentImageTableCell{
+                if(contentLoaded){
+                    cell.baseImageView.isHidden = false
+                }else{
+                    cell.baseImageView.isHidden = true
+                }
+            }
         }
         
-        if cell is ContentTagsTableCell {
+        else if cell is ContentTagsTableCell {
             if let cell = cell as? ContentTagsTableCell{
                 cell.tagsCollection.delegate = self
                 cell.tagsCollection.dataSource = self
@@ -225,15 +279,13 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
             }
         }
         
-        if let cell = cell as? ContentWebViewTableCell{
+        else if let cell = cell as? ContentWebViewTableCell{
             
             if !contentLoaded{
                 cell.contentUrl = contentModel?.contentUrl
             }
             
         }
-        
-        
         
         if indexPath.row == getItemCount() - 1{
             getLastNews()
@@ -242,11 +294,22 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.row == 2, tagItems.count == 0{
+        if indexPath.row == 1{
+            if(!contentLoaded){
+             return 0
+            }
+        }
+        else if indexPath.row == 3, tagItems.count == 0{
             return 0
         }
+            
+        else if indexPath.row == 3, tagItems.count != 0{
+            return collectionHeight
+        }
+            
+            
         
-        else { return UITableView.automaticDimension}
+        return UITableView.automaticDimension
     }
     
 }
@@ -256,8 +319,11 @@ extension ContentVC: ContentLoadingDelegate{
     func contentDidLoad() {
         if !contentLoaded{
             self.stopTopProgress()
+            self.tableView.isScrollEnabled = true
             contentLoaded = true
-            tableView.reloadData()
+            tableView.reloadRows(at: [IndexPath(item: 3, section: 0)], with: .automatic)
+            tableView.reloadRows(at: [IndexPath(item: 1, section: 0)], with: .automatic)
+            
         }
     }
     
@@ -279,17 +345,50 @@ extension ContentVC : UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tagCollectionViewCell", for: indexPath) as? TagCollectionCell{
+       
+        if indexPath.item == tagItems.count - 1{
+            if collectionHeight != collectionView.contentSize.height{
+                collectionHeight = collectionView.contentSize.height
+                self.tableView.reloadRows(at: [IndexPath(row: 3, section: 0)], with: .automatic)
+            }
+            
+        }
+        
+        
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tagsCollectionViewCell", for: indexPath) as? TagsCollectionViewCell{
             cell.model = tagItems[indexPath.item]
             return cell
         }
         
+        
         return UICollectionViewCell()
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 12, height: 12)
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("clicked")
+        
+        //Change BackButton title
+        categoryTitle = tagItems[indexPath.item].tagName
+        selectedCategoryId = categoryTitle
+        performSegue(withIdentifier: "goToSearchResult", sender: self)
+        
     }
+    
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let layout = collectionViewLayout as! UICollectionViewFlowLayout
+        layout.minimumLineSpacing = 7.0
+        layout.minimumInteritemSpacing = 7.0
+        
+        let label = UILabel(frame: CGRect.zero)
+        label.text = tagItems[indexPath.item].tagName
+        let itemWidth = label.intrinsicContentSize.width + 16.0
+        let itemHeight = CGFloat(36.0)
+        
+        return CGSize(width: itemWidth, height: itemHeight)
+    }
+    
+    
     
 }
 
@@ -304,19 +403,27 @@ extension ContentVC {
     func getNewsContent(){
         SVProgressHUD.show()
         
-        Alamofire.request(Constants.URL_CONTENT,
+        let req = Alamofire.request(Constants.URL_CONTENT,
                           method: .get,
                           parameters: ApiHelper.getContentWithId(id: model.newsId))
-            .responseJSON {
-                response in
+        req.responseJSON {
+            response in
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo:nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    self.parseNewsContent(data)
-                    self.getTags()
-                }else{
-                    print("ErrorParsingCategories: " + String(describing: response.result.error))
+                self.parseNewsContent(data)
+            }else{
+                print("ErrorParsingCategories: " + String(describing: response.result.error))
+                let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+                
+                if  cachedResponse != nil{
+                    let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+                    self.parseNewsContent(cachedJson)
                 }
+            }
                 
         }
         
@@ -325,21 +432,27 @@ extension ContentVC {
     
     func getTags(){
         
-        Alamofire.request(Constants.URL_TAGS,
+        let req = Alamofire.request(Constants.URL_TAGS,
                           method: .get,
                           parameters: ApiHelper.getContentTags(id: model.newsId))
-            .responseJSON {
-                response in
+        req.responseJSON {
+            response in
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo:nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    
-                    self.parseTags(data)
-                    self.getLastNews(true)
-                    
-                }else{
-                    print("ErrorParsingMainNews: " + String(describing: response.result.error))
+                self.parseTags(data)
+            }else{
+                print("ErrorParsingMainNews: " + String(describing: response.result.error))
+                let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+                
+                if  cachedResponse != nil{
+                    let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+                    self.parseTags(cachedJson)
                 }
+            }
                 
         }
         
@@ -352,21 +465,27 @@ extension ContentVC {
             lastNewsItems.removeAll()
         }
         
-        Alamofire.request(Constants.BASE_URL,
+        let req = Alamofire.request(Constants.BASE_URL,
                           method: .get,
                           parameters: ApiHelper.getLastNews(offset: offset, limit: limit))
-            .responseJSON {
-                response in
+        req.responseJSON {
+            response in
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo:nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    
-                    self.parseLastNews(data)
-                    
-                    self.offset += 1
-                }else{
-                    print("ErrorPassingLastNews: " + String(describing: response.result.error))
+                self.parseLastNews(data)
+            }else{
+                print("ErrorPassingLastNews: " + String(describing: response.result.error))
+                let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+                
+                if  cachedResponse != nil{
+                    let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+                    self.parseLastNews(cachedJson)
                 }
+            }
                 
         }
     }
@@ -375,10 +494,18 @@ extension ContentVC {
     
     func parseNewsContent(_ json: JSON){
         contentModel = ContentNewsModel.parse(json: json)
+        self.getTags()
     }
     
     func parseTags(_ json: JSON){
         tagItems = TagModel.parse(json)
+        
+//        let tagModel = TagModel()
+//        tagModel.tagName = "sadasdasd"
+//        tagItems.append(tagModel)
+//
+        collectionHeight = CGFloat(36 * tagItems.count)
+        self.getLastNews(true)
     }
     
     func parseLastNews(_ json: JSON){
@@ -391,7 +518,7 @@ extension ContentVC {
             }
         }
         
-        
+        self.offset += 1
         self.tableView.reloadData()
         SVProgressHUD.dismiss()
     }
@@ -404,7 +531,7 @@ extension ContentVC : MyWishListDelegate{
     func wished(model: SimpleNewsModel) {
         do{
             try realm.write {
-                realm.add(model.convertToFavourites())
+                realm.add(contentModel.convertToFavourites())
                 allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
             }
         }catch{

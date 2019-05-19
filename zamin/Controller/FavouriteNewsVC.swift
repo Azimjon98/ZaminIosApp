@@ -8,6 +8,9 @@
 
 import UIKit
 import RealmSwift
+import Alamofire
+import SVProgressHUD
+import SwiftyJSON
 
 class FavouriteNewsVC: UIViewController{
     @IBOutlet weak var tableView: UITableView!
@@ -16,6 +19,7 @@ class FavouriteNewsVC: UIViewController{
     
     let realm = try! Realm()
     
+    var contentUpdating = false
     var allIds: [String]?
     var favourites: Results<EntityFavouriteNewsModel>?
     
@@ -36,7 +40,75 @@ class FavouriteNewsVC: UIViewController{
     
     func loadFavourites(){
         favourites = realm.objects(EntityFavouriteNewsModel.self)
+        
+        
+        for favourite in favourites!{
+            if favourite.lastLocale != UserDefaults.getLocale(){
+                SVProgressHUD.show()
+                contentUpdating = true
+                updateItem(model: favourite)
+                return
+            }
+        }
+        SVProgressHUD.dismiss()
+        contentUpdating = false
         tableView.reloadData()
+    }
+    
+    func updateItem(model: EntityFavouriteNewsModel){
+        
+        let req = Alamofire.request(Constants.URL_CONTENT,
+                                    method: .get,
+                                    parameters: ApiHelper.getContentWithId(id: model.newsId))
+        
+        let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+        
+        if  cachedResponse != nil{
+            
+            let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+            do{
+                try realm.write {
+                    model.update(json: cachedJson)
+                }
+            }catch{
+                print("Error(Favourites): updateModel")
+            }
+            self.loadFavourites()
+            
+        } else{
+            
+            req.responseJSON {
+                response in
+                
+                if response.result.isSuccess{
+                    let data : JSON = JSON(response.result.value!)
+                    let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo:nil,storagePolicy: .allowed)
+                    URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
+                    
+                    do{
+                        try self.realm.write {
+                            model.update(json: data)
+                            
+                        }
+                    }catch{
+                        print("Error(Favourites): updateModel")
+                    }
+                    self.loadFavourites()
+                    
+                }else{
+                    print("ErrorParsingCategories: " + String(describing: response.result.error))
+                    SVProgressHUD.dismiss()
+                    self.contentUpdating = false
+                    self.tableView.reloadData()
+                }
+                
+            }
+
+            
+        }
+        
+        
+        
     }
     
     
@@ -49,10 +121,6 @@ class FavouriteNewsVC: UIViewController{
 }
 
 
-
-
-
-
 extension FavouriteNewsVC : UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if  favourites?.count == 0{
@@ -61,6 +129,9 @@ extension FavouriteNewsVC : UITableViewDelegate, UITableViewDataSource{
             subtitleLabel.text = LanguageHelper.getString(stringId: .message_favourites)
         }
         
+        if  contentUpdating{
+            return 0
+        }
         return favourites?.count ?? 0
     }
     

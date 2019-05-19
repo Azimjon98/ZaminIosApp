@@ -8,6 +8,9 @@
 
 import UIKit
 import RealmSwift
+import Alamofire
+import SwiftyJSON
+import SVProgressHUD
 
 class SelectCategoriesVC: UITableViewController {
     @IBOutlet var myTableView: UITableView!
@@ -18,9 +21,7 @@ class SelectCategoriesVC: UITableViewController {
     let barEditItem: UIBarButtonItem = {
         var edit = UIBarButtonItem()
         edit.tintColor = #colorLiteral(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 1.0)
-        edit.title = "Tahrirlash"
-        
-        
+        edit.title = "reset"
         
         return edit
     }()
@@ -32,7 +33,10 @@ class SelectCategoriesVC: UITableViewController {
 
         // Do any additional setup after loading the view.
         
-//        self.navigationItem.rightBarButtonItem = barEditItem
+        self.navigationItem.rightBarButtonItem = barEditItem
+        
+        self.navigationItem.rightBarButtonItem?.target = self
+        self.navigationItem.rightBarButtonItem?.action = #selector(resetClicked)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -45,6 +49,7 @@ class SelectCategoriesVC: UITableViewController {
     }
     
     func loadFavourites(){
+        categoryItems.removeAll()
         for item in realm.objects(EntityCategoryModel.self){
             let m = EntityCategoryModel()
             m.categoryId = item.categoryId
@@ -71,6 +76,56 @@ class SelectCategoriesVC: UITableViewController {
             print("ERROR: changing Categories!: \(error)")
         }
         
+    }
+    
+    @objc func resetClicked(sender: UIBarButtonItem){
+        let alert = UIAlertController(title: "Barcha o'zgarishlarni bekor qilmoqchimisiz", message: "orqaga qaytishning iloji bo'lmaydi", preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "ortga", style: .destructive) { (action) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+        
+        let okAction = UIAlertAction(title: "ha", style: .cancel) { (action) in
+            self.executeReset()
+        }
+        
+        alert.addAction(cancelAction)
+        alert.addAction(okAction)
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func executeReset(){
+        SVProgressHUD.show()
+        let req = Alamofire.request(Constants.URL_CATEGORIES,
+                                    method: .get,
+                                    parameters: ApiHelper.getAllCategories())
+        
+        let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+        
+        if  cachedResponse != nil{
+            let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+            
+            var categories: [EntityCategoryModel] = [EntityCategoryModel]()
+            
+            for i in cachedJson.arrayValue{
+                categories.append(EntityCategoryModel.parse(json: i))
+            }
+            
+            do{
+                try realm.write {
+                    self.realm.delete(self.realm.objects(EntityCategoryModel.self))
+                    self.realm.add(categories)
+                }
+                
+            }catch{
+                print("ErrorPassingCategories: \(error)")
+            }
+            
+            loadFavourites()
+            SVProgressHUD.dismiss()
+        }
     }
 
 }
@@ -128,7 +183,7 @@ extension SelectCategoriesVC {
 extension SelectCategoriesVC{
     
     func changeLanguage(){
-        navigationItem.title = LanguageHelper.getString(stringId: .text_choose_language)
+        navigationItem.title = LanguageHelper.getString(stringId: .title_select_categories)
         
     }
 }

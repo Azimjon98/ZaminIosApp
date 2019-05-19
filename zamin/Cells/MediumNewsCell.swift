@@ -20,7 +20,7 @@ class MediumNewsCell: UITableViewCell {
     
     var model : SimpleNewsModel!{
         didSet{
-            titleImageView.load(url: model.imageUrl)
+            titleImageView.load(url: model.imageUrl, withQuality: .small)
             titleLabel.attributedText = String.myTitleAttributedString(text: model.title)
             dateLabel.text = String.parseMyDate(date: model.date)
             categoryLabel.text = model.categoryName
@@ -47,6 +47,8 @@ class MediumNewsCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        print("awakeFromNib")
     }
     
     @objc func bookmarkPressed(sender: UIButton!){

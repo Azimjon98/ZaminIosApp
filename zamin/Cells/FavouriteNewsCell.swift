@@ -19,7 +19,7 @@ class FavouriteNewsCell: UITableViewCell {
     
     var index : Int!{
         didSet{
-            indexLabel.text = (index > 10 ? "" : "0") + "\(index ?? 1)"
+            indexLabel.text = (index > 9 ? "" : "0") + "\(index ?? 1)"
         }
     }
     

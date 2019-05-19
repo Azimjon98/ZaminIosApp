@@ -55,7 +55,7 @@ extension SimpleNewsModel{
             
         }
         
-        if  state{
+        if state{
             let categories: Results<EntityCategoryModel> = (try! Realm()).objects(EntityCategoryModel.self)
             for i in categories{
                 if i.categoryId == model.categoryId{

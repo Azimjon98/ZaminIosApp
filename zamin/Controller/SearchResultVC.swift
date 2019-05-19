@@ -143,9 +143,9 @@ extension SearchResultVC{
                 
                 if response.result.isSuccess{
                     let data : JSON = JSON(response.result.value!)
+                     print("\(data)")
                     
                     self.parseNews(data)
-                    
                     self.offset += 1
                 }else{
                     print("Error: " + String(describing: response.result.error))
@@ -168,9 +168,7 @@ extension SearchResultVC{
     //TODO: - PARSING METHODS
     
     func parseNews(_ json: JSON){
-        for newsItem in json["articles"].arrayValue{
-            self.items.append(SimpleNewsModel.parse(json: newsItem))
-        }
+        self.items.append(contentsOf: SimpleNewsModel.parse(json: json) ?? [SimpleNewsModel]())
         
         self.tableView.reloadData()
     }

@@ -32,6 +32,7 @@ class NewsFeedVC: UITableViewController {
     var offset : Int = 1
     var limit: String = "10"
     var currentMainNews = 0;
+    var estimatedHeights: [IndexPath: CGFloat] = [:]
     
     var selectedModel : SimpleNewsModel?
     var selectedCategoryId : String = "-1"
@@ -39,6 +40,7 @@ class NewsFeedVC: UITableViewController {
     var lastLanguage: String = {
         UserDefaults.getLocale()
     }()
+    var makingRequest: Bool = false
     
     var allIds : [String]?
     var categoryItems : Results<EntityCategoryModel>?
@@ -51,12 +53,16 @@ class NewsFeedVC: UITableViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        self.tabBarController?.delegate = self
         
         tableView.register(UINib(nibName: "MediumNewsCell", bundle: nil), forCellReuseIdentifier: "mediumNewsCell")
         tableView.register(UINib(nibName: "SmallNewsCell", bundle: nil), forCellReuseIdentifier: "smallNewsCell")
         tableView.register(UINib(nibName: "VideoNewsCell", bundle: nil), forCellReuseIdentifier: "videoNewsCell")
         
         loadNews()
+        
+        tableView.addLoadingFooter()
+        tableView.tableFooterView?.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -99,8 +105,6 @@ class NewsFeedVC: UITableViewController {
 
 extension NewsFeedVC{
     
-    
-    
     //MARK: - TABLEVIEW DATASOURCE METHODS
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if lastNewsItems.count != 0{
@@ -115,7 +119,7 @@ extension NewsFeedVC{
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
+    if indexPath.row == 0 {
             if let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.categories.value(), for: indexPath) as? CategoriesTableCell{
                 cell.selectionStyle = .none
                 return cell
@@ -166,7 +170,6 @@ extension NewsFeedVC{
             if let cell = tableView.dequeueReusableCell(withIdentifier: "mediumNewsCell", for: indexPath) as? MediumNewsCell{
                 cell.model = lastContinueItems[indexPath.row - 14]
                 cell.delegate = self
-                
                 return cell
             }
         }
@@ -175,6 +178,7 @@ extension NewsFeedVC{
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        estimatedHeights[indexPath] = cell.frame.size.height
         if indexPath.item == 0{
             if let cell = cell as? CategoriesTableCell{
                 cell.collectionView.dataSource = self
@@ -200,28 +204,20 @@ extension NewsFeedVC{
             } else{
                 cell.unbookItem()
             }
-        }
-        
-        if let cell = cell as? VideoNewsCell{
+        } else if let cell = cell as? VideoNewsCell{
+            if allIds?.contains(cell.model.newsId) ?? false{
+                cell.bookItem()
+            } else{
+                cell.unbookItem()
+            }
+        } else if let cell = cell as? MediumNewsCell{
             if allIds?.contains(cell.model.newsId) ?? false{
                 cell.bookItem()
             } else{
                 cell.unbookItem()
             }
         }
-        
-        if let cell = cell as? MediumNewsCell{
-            if allIds?.contains(cell.model.newsId) ?? false{
-                cell.bookItem()
-            } else{
-                cell.unbookItem()
-            }
-        }
-        
-        if indexPath.row == getItemsCount() - 1 {
-            getLastNews()
-        }
-        
+    
     }
     
     //MARK: - TABLEVIEW DELEGATE METHODS
@@ -261,8 +257,12 @@ extension NewsFeedVC{
         
         return UITableView.automaticDimension
     }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return estimatedHeights[indexPath] ?? tableView.estimatedRowHeight
+    }
+    
 }
-
 
 
 
@@ -314,13 +314,25 @@ extension NewsFeedVC: UICollectionViewDataSource, UICollectionViewDelegate, UICo
                 }
             }
             
-            //Update PageControlIndicators
-            currentMainNews = indexPath.row
-            self.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
+//            //Update PageControlIndicators
+//            currentMainNews = indexPath.item
+//            self.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
         }
 
     }
     
+    override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let x = targetContentOffset.pointee.x
+        let velY = velocity.y
+        
+//        print(x, view.frame.width, x / view.frame.width, y, velX, velY)
+        if  velY == 0{
+            //Update PageControlIndicators
+            currentMainNews = Int(x / view.frame.width)
+            self.tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
+        }
+        
+    }
     
     
     //MARK: - COLLECTIONVIEW DELEGATE METHODS
@@ -364,6 +376,10 @@ extension NewsFeedVC {
     //MARK: - NETWORKING AND DATABASE FETCHING
     
     func loadNews(){
+        if makingRequest {
+            return
+        }
+        makingRequest = true
         let count = realm.objects(EntityCategoryModel.self).count
         
         if  count == 0{
@@ -377,22 +393,26 @@ extension NewsFeedVC {
     }
     
     func getCategories(){
-        Alamofire.request(Constants.URL_CATEGORIES,
+        let req = Alamofire.request(Constants.URL_CATEGORIES,
                           method: .get,
                           parameters: ApiHelper.getAllCategories())
-            .responseJSON {
-                response in
+        req.responseJSON {
+            response in
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo:nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    self.parseCategories(data)
-                }else{
-                    print("ErrorParsingCategories: " + String(describing: response.result.error))
-                    self.tableView.setBigEmptyView()
-                    if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
-                        button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
-                    }
+                
+                self.parseCategories(data)
+            }else{
+                print("ErrorParsingCategories: " + String(describing: response.result.error))
+                self.tableView.setBigEmptyView()
+                if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
+                    button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
                 }
+            }
         }
         
         
@@ -405,27 +425,39 @@ extension NewsFeedVC {
         lastContinueItems.removeAll()
         
         tableView.reloadData()
+
         
         SVProgressHUD.show()
         
-        Alamofire.request(Constants.BASE_URL,
+        let req = Alamofire.request(Constants.BASE_URL,
                           method: .get,
                           parameters: ApiHelper.getMainNews())
-            .responseJSON {
-                response in
+        req.responseJSON {
+            response in
+            
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo:nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    self.parseMainNews(data)
-                    self.getVideoNews()
-                }else{
-                    print("ErrorParsingMainNews: " + String(describing: response.result.error))
+                self.parseMainNews(data)
+            }else{
+                print("ErrorParsingMainNews: " + String(describing: response.result.error))
+                let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+                
+                if cachedResponse != nil{
+                    let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+                    self.parseMainNews(cachedJson)
+                }else {
                     SVProgressHUD.dismiss()
                     self.tableView.setBigEmptyView()
                     if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
                         button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
                     }
+                    
                 }
+            }
                 
         }
         
@@ -434,25 +466,34 @@ extension NewsFeedVC {
     
     func getVideoNews(){
         
-        Alamofire.request(Constants.URL_MEDIA_NEWS,
+        let req = Alamofire.request(Constants.URL_MEDIA_NEWS,
                           method: .get,
                           parameters: ApiHelper.getMediaNewsWithType(offset: 1, limit: "3", type: "2"))
-            .responseJSON {
-                response in
+        req.responseJSON {
+            response in
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo:nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    
-                    self.parseVideoNews(data)
-                    self.getLastNews(true)
+                self.parseVideoNews(data)
+            }else{
+                print("ErrorPassingVideoNews: " + String(describing: response.result.error))
+                let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+                
+                if  cachedResponse != nil{
+                    let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+                    self.parseVideoNews(cachedJson)
                     
                 }else{
-                    print("ErrorPassingVideoNews: " + String(describing: response.result.error))
+                    SVProgressHUD.dismiss()
                     self.tableView.setBigEmptyView()
                     if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
                         button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
                     }
                 }
+            }
                 
         }
     }
@@ -462,27 +503,37 @@ extension NewsFeedVC {
             offset = 1
         }
         
-        Alamofire.request(Constants.BASE_URL,
+        let req = Alamofire.request(Constants.BASE_URL,
                           method: .get,
                           parameters: ApiHelper.getLastNews(offset: offset, limit: limit))
-            .responseJSON {
-                response in
+        
+        req.responseJSON {
+            response in
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo:nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    
-                    self.parseLastNews(data)
-                    
+                
+                self.parseLastNews(data)
+                self.offset += 1
+            }else{
+                print("ErrorPassingLastNews: " + String(describing: response.result.error))
+                let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+                
+                if  cachedResponse != nil{
+                    let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+                    self.parseLastNews(cachedJson)
                     self.offset += 1
-                }else{
-                    print("ErrorPassingLastNews: " + String(describing: response.result.error))
-                    if self.offset == 1{
-                        self.tableView.setBigEmptyView()
-                        if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
-                            button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
-                        }
+                }else if self.offset == 1{
+                    SVProgressHUD.dismiss()
+                    self.tableView.setBigEmptyView()
+                    if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
+                        button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
                     }
                 }
+            }
                 
         }
     }
@@ -508,37 +559,35 @@ extension NewsFeedVC {
         categoryItems = realm.objects(EntityCategoryModel.self).filter("isEnabled = true")
         allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
         self.getMainNews()
-        
     }
     
     func parseMainNews(_ json: JSON){
         self.mainNewsItems = SimpleNewsModel.parse(json: json) ?? [SimpleNewsModel]()
-        
+        self.getVideoNews()
     }
 
     func parseVideoNews(_ json: JSON){
         self.videoItems = SimpleNewsModel.parse(json: json) ?? [SimpleNewsModel]()
+        self.getLastNews(true)
     }
     
     func parseLastNews(_ json: JSON){
         for newsItem in json["articles"].arrayValue{
-            
             if self.lastNewsItems.count < 6{
                 self.lastNewsItems.append(SimpleNewsModel.parse(json: newsItem, type: -1, withCategory: true))
             }else{
                 self.lastContinueItems.append(SimpleNewsModel.parse(json: newsItem,type: -1, withCategory: true))
             }
-            
         }
         
         SVProgressHUD.dismiss()
         self.tableView.removeBackView()
-        tableView.reloadData()
+        makingRequest = false
+        self.tableView.reloadData()
+        tableView.tableFooterView?.isHidden = true
     }
     
 }
-
-
 
 
 extension NewsFeedVC : MyWishListDelegate{
@@ -548,14 +597,12 @@ extension NewsFeedVC : MyWishListDelegate{
             try realm.write {
                 realm.add(model.convertToFavourites())
                 allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
-//                self.tableView.reloadData()
+
             }
         }catch{
             print("Error(TopNewsVC) adding to realm")
         }
     }
-    
-    
     
     func unwished(newsId: String) {
         
@@ -564,15 +611,13 @@ extension NewsFeedVC : MyWishListDelegate{
                 let objectsToDelete = realm.objects(EntityFavouriteNewsModel.self).filter("newsId = %@", newsId)
                 realm.delete(objectsToDelete)
                 allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
-//                self.tableView.reloadData()
+
             }
         }catch{
             print("Error(TopNewsVC) adding to realm")
         }
     }
-    
 }
-
 
 extension NewsFeedVC{
     
@@ -581,3 +626,44 @@ extension NewsFeedVC{
     }
     
 }
+
+
+
+extension NewsFeedVC{
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffset = tableView.contentOffset.y
+        let maxOffset = tableView.contentSize.height
+        let frameSize = tableView.frame.size.height
+        
+        if maxOffset - frameSize - currentOffset <= 0, !makingRequest{
+            makingRequest = true
+            tableView.tableFooterView?.isHidden = false
+            getLastNews()
+        }
+    
+        print("offsets: \(currentOffset)    \(maxOffset)     \(frameSize)")
+        
+        
+       
+    }
+    
+}
+
+extension NewsFeedVC: UITabBarControllerDelegate{
+
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        let tabBarIndex = tabBarController.selectedIndex
+        
+        if tabBarIndex == 0 {
+            
+            DispatchQueue.main.async {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+//                self.tableView.setcon
+            }
+            
+        }
+    }
+    
+}
+

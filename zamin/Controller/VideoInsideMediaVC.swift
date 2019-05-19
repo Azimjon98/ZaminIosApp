@@ -144,28 +144,37 @@ extension VideoInsideMediaVC{
         }
         
         
-        Alamofire.request(Constants.URL_MEDIA_NEWS,
+        let req = Alamofire.request(Constants.URL_MEDIA_NEWS,
                           method: .get,
                           parameters: ApiHelper.getMediaNewsWithType(offset: offset, limit: limit, type: "2"))
-            .responseJSON {
-                response in
-                SVProgressHUD.dismiss()
+        req.responseJSON {
+            response in
+            SVProgressHUD.dismiss()
+            
+            if response.result.isSuccess{
+                let data : JSON = JSON(response.result.value!)
                 
-                if response.result.isSuccess{
-                    let data : JSON = JSON(response.result.value!)
-                    
-                    self.parseNews(data)
+                let cachedURLResponse = CachedURLResponse(response: response.response!, data: response.data! as Data , userInfo:nil,storagePolicy: .allowed)
+                URLCache.shared.storeCachedResponse(cachedURLResponse, for: response.request!)
+                
+                self.parseNews(data)
+                self.offset += 1
+            }else{
+                print("Error: " + String(describing: response.result.error))
+                let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
+                
+                if  cachedResponse != nil{
+                    let cachedJson = try! JSON(data: (cachedResponse?.data)!)
+                    self.parseNews(cachedJson)
                     self.offset += 1
-                }else{
-                    print("Error: " + String(describing: response.result.error))
-                    if  self.offset == 1{
-                        self.titleView.isHidden = true
-                        self.tableView.setBigEmptyView()
-                        if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
-                            button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
-                        }
+                }else if self.offset == 1{
+                    self.titleView.isHidden = true
+                    self.tableView.setBigEmptyView()
+                    if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
+                        button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
                     }
                 }
+            }
         }
         
         

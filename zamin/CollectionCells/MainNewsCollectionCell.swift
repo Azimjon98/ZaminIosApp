@@ -19,7 +19,7 @@ class MainNewsCollectionCell: UICollectionViewCell {
     
     var model : SimpleNewsModel!{
         didSet{
-            imageView.load(url: model.imageUrl)
+            imageView.load(url: model.imageUrl, withQuality: .medium)
             titleLabel.attributedText = String.myTitleAttributedString(text: model.title)
             dateLabel.text = String.parseMyDate(date: model.date)
             categoryNameLabel.text = model.categoryName
