@@ -28,10 +28,12 @@ class SearchResultVC: UITableViewController {
     
     var allIds : [String]?
     var items : [SimpleNewsModel] = [SimpleNewsModel]()
+    var estimatedHeights: [IndexPath: CGFloat] = [:]
     
     var offset : Int = 1
     var limit: String = "10"
     var selectedIndex = -1
+    var makingRequest: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -89,16 +91,13 @@ extension SearchResultVC{
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        estimatedHeights[indexPath] = cell.frame.size.height
         if let cell = cell as? MediumNewsCell{
             if allIds?.contains(cell.model.newsId) ?? false{
                 cell.bookItem()
             } else{
                 cell.unbookItem()
             }
-        }
-        
-        if indexPath.row == items.count - 1{
-            self.getNews()
         }
     }
     
@@ -108,6 +107,10 @@ extension SearchResultVC{
         selectedIndex = indexPath.row
         performSegue(withIdentifier: "goToContent", sender: self)
     }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return estimatedHeights[indexPath] ?? tableView.estimatedRowHeight
+    }
 }
 
 extension SearchResultVC{
@@ -115,6 +118,11 @@ extension SearchResultVC{
     
     //TODO: Networking
     func getNews(_ fromBegin: Bool = false){
+        if  makingRequest{
+            return
+        }
+        makingRequest = true
+        
         if  fromBegin{
             offset = 1
             items.removeAll()
@@ -151,6 +159,7 @@ extension SearchResultVC{
                     print("Error: " + String(describing: response.result.error))
                     
                     if self.offset == 1{
+                        self.makingRequest = false
                         self.tableView.setBigEmptyView()
                         if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
                             button.addTarget(self, action: #selector(self.refreshButtonClicked), for: .touchUpInside)
@@ -170,6 +179,7 @@ extension SearchResultVC{
     func parseNews(_ json: JSON){
         self.items.append(contentsOf: SimpleNewsModel.parse(json: json) ?? [SimpleNewsModel]())
         
+        makingRequest = false
         self.tableView.reloadData()
     }
     
@@ -211,6 +221,25 @@ extension SearchResultVC{
     
     @objc func refreshButtonClicked(sender: UIButton) {
         getNews(true)
+    }
+    
+}
+
+
+
+extension SearchResultVC{
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffset = tableView.contentOffset.y
+        let maxOffset = tableView.contentSize.height
+        let frameSize = tableView.frame.size.height
+        
+        if maxOffset - frameSize - currentOffset <= 0, !makingRequest{
+            tableView.addLoadingFooter()
+            getNews()
+        }
+        
+        
     }
     
 }

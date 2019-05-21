@@ -60,9 +60,9 @@ extension UIImageView{
         if withQuality == .original{
             self.sd_setImage(with:URL(string: url), placeholderImage: UIImage(named: "empty_medium"))
         } else if withQuality == .medium{
-            self.sd_setImage(with:URL(string: url + "&width=300&quality=70"), placeholderImage: UIImage(named: "empty_medium"))
+            self.sd_setImage(with:URL(string: url + "&width=300&quality=90"), placeholderImage: UIImage(named: "empty_medium"))
         }else if withQuality == .small{
-            self.sd_setImage(with:URL(string: url + "&width=300&quality=40"), placeholderImage: UIImage(named: "empty_medium"))
+            self.sd_setImage(with:URL(string: url + "&width=300&quality=50"), placeholderImage: UIImage(named: "empty_medium"))
         }
         
     }
@@ -199,4 +199,20 @@ extension UITableView {
             self.scrollToRow(at: indexPath, at: .top, animated: false)
         }
     }
+}
+
+
+// Dismiss keyboard wherever tapped
+extension UIViewController {
+    public func hideKeyboardWhenTappedAround() {
+        let tap: UIGestureRecognizer = UIGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+//        tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
 }

@@ -52,6 +52,9 @@ class ProfileVC: UIViewController {
         UserDefaults.setNotificationEnabled(notificationSwitch.isOn)
     }
 
+    @IBAction func profileClicked(_ sender: Any) {
+        presentAlert(message: LanguageHelper.getString(stringId: .text_login_alert_disabled))
+    }
     
   
     @IBAction func changeLanguageSelected(_ sender: Any) {
@@ -190,3 +193,4 @@ extension ProfileVC{
 
     }
 }
+

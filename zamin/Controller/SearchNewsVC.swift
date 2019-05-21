@@ -21,12 +21,14 @@ class SearchNewsVC: UIViewController {
     //TODO: - Variables
     var items: [SimpleNewsModel] = [SimpleNewsModel]()
     var allIds : [String]?
+    var estimatedHeights: [IndexPath: CGFloat] = [:]
     
     var noItems:Bool = false
     var offset : Int = 0
     var limit: String = "10"
     var key: String = ""
     var selectedIndex: Int = 0
+    var makingRequest: Bool = false
     
     
     override func viewDidLoad() {
@@ -37,9 +39,12 @@ class SearchNewsVC: UIViewController {
         
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         tableView.register(UINib(nibName: "MediumNewsCell", bundle: nil), forCellReuseIdentifier: "mediumNewsCell")
+        tableView.keyboardDismissMode = .onDrag
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+//        self.hideKeyboardWhenTappedAround()
         allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
         changeLanguage()
     }
@@ -52,7 +57,7 @@ class SearchNewsVC: UIViewController {
             }
         }
     }
-
+    
 }
 
 extension SearchNewsVC{
@@ -60,7 +65,13 @@ extension SearchNewsVC{
     //TODO: - Netwotking
     
     func searchNews(_ fromBegin: Bool = false){
+        if makingRequest {
+            return
+        }
+        makingRequest = true
         self.tableView.removeBackView()
+        
+        
         if  fromBegin{
             noItems = false
             offset = 1
@@ -78,6 +89,7 @@ extension SearchNewsVC{
                 self.parseNews(data)
                 self.offset += 1
             }else{
+                self.makingRequest = false
                 print("Error: " + String(describing: response.result.error))
                 if self.offset == 1{
                     self.tableView.setBigEmptyView()
@@ -95,6 +107,8 @@ extension SearchNewsVC{
     func parseNews(_ json: JSON){
         let items = SimpleNewsModel.parse(json: json) ?? [SimpleNewsModel]()
         
+        
+        makingRequest = false
         if  items.count == 0{
             if  offset == 1{
                 self.tableView.setBigNoItemView()
@@ -104,7 +118,6 @@ extension SearchNewsVC{
             self.items.append(contentsOf: items)
             self.tableView.reloadData()
         }
-        
     }
     
 }
@@ -133,6 +146,7 @@ extension SearchNewsVC : UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        estimatedHeights[indexPath] = cell.frame.size.height
         if let cell = cell as? MediumNewsCell{
             if allIds?.contains(cell.model.newsId) ?? false{
                 cell.bookItem()
@@ -140,17 +154,19 @@ extension SearchNewsVC : UITableViewDelegate, UITableViewDataSource{
                 cell.unbookItem()
             }
         }
-        
-        if indexPath.row == items.count - 1, !noItems{
-            searchNews()
-        }
     }
     
     //TODO: - DELEGATE METHODS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         selectedIndex = indexPath.row
         performSegue(withIdentifier: "goToContent", sender: self)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return estimatedHeights[indexPath] ?? tableView.estimatedRowHeight
     }
     
     
@@ -219,3 +235,27 @@ extension SearchNewsVC : MyWishListDelegate{
     }
     
 }
+
+
+
+
+extension SearchNewsVC{
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffset = tableView.contentOffset.y
+        let maxOffset = tableView.contentSize.height
+        let frameSize = tableView.frame.size.height
+        
+        
+        if maxOffset - frameSize - currentOffset <= 0, !makingRequest{
+            print("false is best")
+            tableView.addLoadingFooter()
+            searchNews()
+        }
+        
+        
+        
+    }
+    
+}
+

@@ -20,8 +20,7 @@ class SelectCategoriesVC: UITableViewController {
     
     let barEditItem: UIBarButtonItem = {
         var edit = UIBarButtonItem()
-        edit.tintColor = #colorLiteral(red: 0.0, green: 122.0 / 255.0, blue: 1.0, alpha: 1.0)
-        edit.title = "reset"
+        edit.image = UIImage(named: "refresh-button")
         
         return edit
     }()
@@ -79,13 +78,14 @@ class SelectCategoriesVC: UITableViewController {
     }
     
     @objc func resetClicked(sender: UIBarButtonItem){
-        let alert = UIAlertController(title: "Barcha o'zgarishlarni bekor qilmoqchimisiz", message: "orqaga qaytishning iloji bo'lmaydi", preferredStyle: .alert)
+        let alert = UIAlertController(title: LanguageHelper.getString(stringId: .text_reset_alert_title),
+                                        message: LanguageHelper.getString(stringId: .text_reset_alert_messege), preferredStyle: .alert)
         
-        let cancelAction = UIAlertAction(title: "ortga", style: .destructive) { (action) in
+        let cancelAction = UIAlertAction(title: LanguageHelper.getString(stringId: .text_back), style: .destructive) { (action) in
             alert.dismiss(animated: true, completion: nil)
         }
         
-        let okAction = UIAlertAction(title: "ha", style: .cancel) { (action) in
+        let okAction = UIAlertAction(title: LanguageHelper.getString(stringId: .text_yes), style: .cancel) { (action) in
             self.executeReset()
         }
         

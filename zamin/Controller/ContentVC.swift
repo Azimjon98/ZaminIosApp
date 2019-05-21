@@ -16,6 +16,16 @@ import TagCellLayout
 
 class ContentVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var changeFontView: UIView!{
+        didSet{
+            changeFontView.layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            changeFontView.layer.shadowOpacity = 0.2
+            changeFontView.layer.shadowOffset = CGSize.zero
+            changeFontView.layer.shadowRadius = 4
+            
+        }
+    }
+    @IBOutlet weak var decreaseFontButton: UIButton!
     
     let bookmarkButton: UIBarButtonItem = {
         var mbookmark = UIBarButtonItem()
@@ -31,9 +41,15 @@ class ContentVC: UIViewController {
         return share
     }()
     
+    let textAttrButton: UIBarButtonItem = {
+        var font = UIBarButtonItem()
+        font.image = UIImage(named: "font")
+        
+        return font
+    }()
+    
     var contentModel : ContentNewsModel!{
         didSet{
-            print("arrayscontentModel")
             self.navigationItem.setRightBarButtonItems([bookmarkButton, shareButton], animated: true)
             self.navigationItem.rightBarButtonItems![0].target = self
             self.navigationItem.rightBarButtonItems![0].action = #selector(bookmarkPressed)
@@ -70,20 +86,24 @@ class ContentVC: UIViewController {
     var selectedIndex = -1
     var contentLoaded: Bool = false
     var myContentUrl: String = ""
+    var makingRequest: Bool = false
+    var fontChangeVisible: Bool = false
+    var currentFont: Int = 100
+    var offsetBeforeFontChange: CGPoint!
     
     var allIds : [String]?
     var lastNewsItems : [SimpleNewsModel] = [SimpleNewsModel]()
     var tagItems : [TagModel] = [TagModel]()
+    var estimatedHeights: [IndexPath: CGFloat] = [:]
+    
     
     var collectionHeight: CGFloat = 36.0
-    
     var selectedCategoryId : String = "-1"
     var categoryTitle: String = ""
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("arraysdidLoad")
         
         // Do any additional setup after loading the view.
         tableView.register(UINib(nibName: "MediumNewsCell", bundle: nil), forCellReuseIdentifier: "mediumNewsCell")
@@ -98,7 +118,7 @@ class ContentVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("arraysviewWillAppear")
+        
         allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
         if lastNewsItems.count != 0 {
             for cell in tableView.visibleCells{
@@ -163,6 +183,58 @@ class ContentVC: UIViewController {
         
     }
     
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        print("tapped")
+        if fontChangeVisible{
+            changeFontView.removeFromSuperview()
+            tableView.isUserInteractionEnabled = true
+            fontChangeVisible = false
+        }
+    }
+    
+    @objc func fontChange(sender: UIBarButtonItem){
+        if !fontChangeVisible{
+            view.addSubview(changeFontView)
+            fontChangeVisible = true
+        }else{
+            changeFontView.removeFromSuperview()
+            fontChangeVisible = false
+        }
+        
+        changeFontView.frame = CGRect(x: view.frame.width - changeFontView.frame.width - 50, y: changeFontView.frame.minY, width: changeFontView.frame.width, height: changeFontView.frame.height)
+    }
+    
+    @IBAction func fontDecreasePressed(_ sender: Any) {
+        if  currentFont > 100{
+            offsetBeforeFontChange = tableView.contentOffset
+            currentFont = currentFont - 10
+            if let cell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? ContentWebViewTableCell{
+                
+                cell.webView.evaluateJavaScript("document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '\(currentFont)%'") { (complete, error) in
+                    cell.updateWebView(false)
+                }
+                
+                
+            }
+            
+        }
+    }
+    
+    
+    @IBAction func fontIncreasePressed(_ sender: Any) {
+        if currentFont < 180{
+            offsetBeforeFontChange = tableView.contentOffset
+            currentFont = currentFont + 10
+            if let cell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? ContentWebViewTableCell{
+                
+                cell.webView.evaluateJavaScript("document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '\(currentFont)%'") { (complete, error) in
+                    cell.updateWebView(true)
+                }
+                
+            }
+        }
+    }
+    
     
 }
 
@@ -193,7 +265,6 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
         else if indexPath.row == 1{
             if let cell = tableView.dequeueReusableCell(withIdentifier: "contentImageTableCell", for: indexPath) as? ContentImageTableCell{
                 cell.imageUrl = contentModel.imageUrl
-                cell.baseImageView.isHidden = true
                 cell.selectionStyle = .none
                 
                 return cell
@@ -203,17 +274,17 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
         else if indexPath.row == 2{
             if let cell = tableView.dequeueReusableCell(withIdentifier: "contentWebViewCell", for: indexPath) as? ContentWebViewTableCell{
                 cell.delegate = self
-                cell.selectionStyle = .none
+                if !contentLoaded{
+                    cell.contentUrl = contentModel?.contentUrl
+                }
                 
+                cell.selectionStyle = .none
                 return cell
             }
         }
             
         else if indexPath.row == 3{
             if let cell = tableView.dequeueReusableCell(withIdentifier: "contentTagsCell", for: indexPath) as? ContentTagsTableCell{
-//                let tagCellLayout = TagCellLayout(alignment: .center, delegate: self)
-//                cell.tagsCollection.collectionViewLayout = tagCellLayout
-//                cell.selectionStyle = .none
                 return cell
             }
         }
@@ -228,7 +299,6 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
             if let cell = tableView.dequeueReusableCell(withIdentifier: "mediumNewsCell", for: indexPath) as? MediumNewsCell{
                 cell.model = lastNewsItems[indexPath.item - 5]
                 cell.delegate = self
-                print("cellCreated: \(indexPath.row)")
                 
                 return cell
             }
@@ -252,22 +322,13 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        print("willDisplay: \(indexPath.row)")
+        estimatedHeights[indexPath] = cell.frame.size.height
         if let cell = cell as? MediumNewsCell{
             if allIds?.contains(cell.model.newsId) ?? false{
                 cell.bookItem()
             } else{
                 cell.unbookItem()
-            }
-            print("cellwillDisplay: \(indexPath.row)")
-        }
-            
-        else if cell is ContentImageTableCell {
-            if let cell = cell as? ContentImageTableCell{
-                if(contentLoaded){
-                    cell.baseImageView.isHidden = false
-                }else{
-                    cell.baseImageView.isHidden = true
-                }
             }
         }
         
@@ -279,18 +340,16 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
             }
         }
         
-        else if let cell = cell as? ContentWebViewTableCell{
-            
-            if !contentLoaded{
-                cell.contentUrl = contentModel?.contentUrl
-            }
-            
+        else if indexPath.row == 2, contentLoaded{
+            textAttrButton.isEnabled = true
         }
         
-        if indexPath.row == getItemCount() - 1{
-            getLastNews()
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == 2{
+           textAttrButton.isEnabled = false
         }
-       
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -306,25 +365,37 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
         else if indexPath.row == 3, tagItems.count != 0{
             return collectionHeight
         }
-            
-            
         
         return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        print("estimatedHeight: \(indexPath.row)   \(estimatedHeights[indexPath] ?? tableView.estimatedRowHeight)")
+        return estimatedHeights[indexPath] ?? tableView.estimatedRowHeight
     }
     
 }
 
 extension ContentVC: ContentLoadingDelegate{
     
-    func contentDidLoad() {
+    func contentDidLoad(_ height: CGFloat) {
         if !contentLoaded{
+            contentLoaded = true
             self.stopTopProgress()
             self.tableView.isScrollEnabled = true
-            contentLoaded = true
-            tableView.reloadRows(at: [IndexPath(item: 3, section: 0)], with: .automatic)
-            tableView.reloadRows(at: [IndexPath(item: 1, section: 0)], with: .automatic)
             
+            tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
+            //enable font change button in navigation bar
+            self.navigationItem.rightBarButtonItems?.append(textAttrButton)
+            self.navigationItem.rightBarButtonItems![2].target = self
+            self.navigationItem.rightBarButtonItems![2].action = #selector(fontChange)
+
+        }else{
+            tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
+//            self.tableView.setContentOffset(offsetBeforeFontChange, animated: false)
         }
+        
+        estimatedHeights[IndexPath(row: 2, section: 0)] = height
     }
     
     func contentAction(linkUrl url: String) {
@@ -365,7 +436,7 @@ extension ContentVC : UICollectionViewDelegate, UICollectionViewDataSource, UICo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("clicked")
+        
         
         //Change BackButton title
         categoryTitle = tagItems[indexPath.item].tagName
@@ -401,6 +472,11 @@ extension ContentVC {
     //MARK: - NETWORKING AND DATABASE FETCHING
     
     func getNewsContent(){
+        if makingRequest {
+            return
+        }
+        makingRequest = true
+        
         SVProgressHUD.show()
         
         let req = Alamofire.request(Constants.URL_CONTENT,
@@ -416,6 +492,7 @@ extension ContentVC {
                 
                 self.parseNewsContent(data)
             }else{
+                self.makingRequest = false
                 print("ErrorParsingCategories: " + String(describing: response.result.error))
                 let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
                 
@@ -445,6 +522,7 @@ extension ContentVC {
                 
                 self.parseTags(data)
             }else{
+                self.makingRequest = false
                 print("ErrorParsingMainNews: " + String(describing: response.result.error))
                 let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
                 
@@ -478,6 +556,7 @@ extension ContentVC {
                 
                 self.parseLastNews(data)
             }else{
+                self.makingRequest = false
                 print("ErrorPassingLastNews: " + String(describing: response.result.error))
                 let cachedResponse = URLCache.shared.cachedResponse(for: req.request!)
                 
@@ -518,6 +597,7 @@ extension ContentVC {
             }
         }
         
+        makingRequest = false
         self.offset += 1
         self.tableView.reloadData()
         SVProgressHUD.dismiss()
@@ -552,6 +632,27 @@ extension ContentVC : MyWishListDelegate{
         }catch{
             print("Error(TopNewsVC) adding to realm")
         }
+    }
+    
+}
+
+
+extension ContentVC{
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffset = tableView.contentOffset.y
+        let maxOffset = tableView.contentSize.height
+        let frameSize = tableView.frame.size.height
+        
+        
+        if maxOffset - frameSize - currentOffset <= 0, !makingRequest{
+            print("\(currentOffset)    \(maxOffset)   \(frameSize)")
+            makingRequest = true
+            tableView.addLoadingFooter()
+            getLastNews()
+        }
+        
+        
     }
     
 }

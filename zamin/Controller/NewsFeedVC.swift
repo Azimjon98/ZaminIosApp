@@ -32,7 +32,6 @@ class NewsFeedVC: UITableViewController {
     var offset : Int = 1
     var limit: String = "10"
     var currentMainNews = 0;
-    var estimatedHeights: [IndexPath: CGFloat] = [:]
     
     var selectedModel : SimpleNewsModel?
     var selectedCategoryId : String = "-1"
@@ -48,12 +47,13 @@ class NewsFeedVC: UITableViewController {
     var lastNewsItems : [SimpleNewsModel] = [SimpleNewsModel]()
     var videoItems : [SimpleNewsModel] = [SimpleNewsModel]()
     var lastContinueItems : [SimpleNewsModel] = [SimpleNewsModel]()
+    var estimatedHeights: [IndexPath: CGFloat] = [:]
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        self.tabBarController?.delegate = self
+        
         
         tableView.register(UINib(nibName: "MediumNewsCell", bundle: nil), forCellReuseIdentifier: "mediumNewsCell")
         tableView.register(UINib(nibName: "SmallNewsCell", bundle: nil), forCellReuseIdentifier: "smallNewsCell")
@@ -61,11 +61,10 @@ class NewsFeedVC: UITableViewController {
         
         loadNews()
         
-        tableView.addLoadingFooter()
-        tableView.tableFooterView?.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.delegate = self
         allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
         
         if UserDefaults.getLocale() != lastLanguage{
@@ -127,6 +126,7 @@ extension NewsFeedVC{
         }else if indexPath.row == 1{
             if let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.main_news.value(), for: indexPath) as? MainNewsTableCell{
                 cell.selectionStyle = .none
+//                cell.isUserInteractionEnabled = false
                 return cell
             }
         }else if indexPath.row == 2{
@@ -224,19 +224,22 @@ extension NewsFeedVC{
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if  indexPath.row >= 4, indexPath.row <= 9{
             selectedModel = lastNewsItems[indexPath.row - 4]
+            performSegue(withIdentifier: "goToContent", sender: self)
         }
         
         else if indexPath.row >= 11, indexPath.row <= 13{
             selectedModel = videoItems[indexPath.row - 11]
+            performSegue(withIdentifier: "goToContent", sender: self)
         }
         
         else if indexPath.row >= 14{
             selectedModel = lastContinueItems[indexPath.row - 14]
+            performSegue(withIdentifier: "goToContent", sender: self)
         }
         
         
         tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: "goToContent", sender: self)
+        
     }
     
     
@@ -407,6 +410,7 @@ extension NewsFeedVC {
                 
                 self.parseCategories(data)
             }else{
+                self.makingRequest = false
                 print("ErrorParsingCategories: " + String(describing: response.result.error))
                 self.tableView.setBigEmptyView()
                 if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
@@ -450,6 +454,7 @@ extension NewsFeedVC {
                     let cachedJson = try! JSON(data: (cachedResponse?.data)!)
                     self.parseMainNews(cachedJson)
                 }else {
+                    self.makingRequest = false
                     SVProgressHUD.dismiss()
                     self.tableView.setBigEmptyView()
                     if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
@@ -487,6 +492,7 @@ extension NewsFeedVC {
                     self.parseVideoNews(cachedJson)
                     
                 }else{
+                    self.makingRequest = false
                     SVProgressHUD.dismiss()
                     self.tableView.setBigEmptyView()
                     if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
@@ -527,6 +533,7 @@ extension NewsFeedVC {
                     self.parseLastNews(cachedJson)
                     self.offset += 1
                 }else if self.offset == 1{
+                    self.makingRequest = false
                     SVProgressHUD.dismiss()
                     self.tableView.setBigEmptyView()
                     if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
@@ -584,7 +591,6 @@ extension NewsFeedVC {
         self.tableView.removeBackView()
         makingRequest = false
         self.tableView.reloadData()
-        tableView.tableFooterView?.isHidden = true
     }
     
 }
@@ -638,13 +644,10 @@ extension NewsFeedVC{
         
         if maxOffset - frameSize - currentOffset <= 0, !makingRequest{
             makingRequest = true
-            tableView.tableFooterView?.isHidden = false
+            tableView.addLoadingFooter()
             getLastNews()
         }
     
-        print("offsets: \(currentOffset)    \(maxOffset)     \(frameSize)")
-        
-        
        
     }
     
@@ -655,14 +658,16 @@ extension NewsFeedVC: UITabBarControllerDelegate{
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let tabBarIndex = tabBarController.selectedIndex
         
-        if tabBarIndex == 0 {
+        
+        
+        if tabBarIndex == 0, MyTabBarIndex.tabBarIndex == tabBarIndex, !self.tableView.visibleCells.isEmpty {
             
             DispatchQueue.main.async {
                 self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-//                self.tableView.setcon
             }
             
         }
+        MyTabBarIndex.tabBarIndex = tabBarIndex
     }
     
 }

@@ -17,6 +17,7 @@
 		CA048B7A226F0ECF00A33840 /* TabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA048B79226F0ECF00A33840 /* TabBarVC.swift */; };
 		CA048B7D226F66E800A33840 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA048B7C226F66E800A33840 /* Extension.swift */; };
 		CA138FEA227F85A8002473F5 /* Converters.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA138FE9227F85A8002473F5 /* Converters.swift */; };
+		CA2483482292912300CCCA6B /* StaticHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2483472292912300CCCA6B /* StaticHelpers.swift */; };
 		CA2B2744227AFF640087A11B /* TagModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2B2743227AFF640087A11B /* TagModel.swift */; };
 		CA2B2747227CA9270087A11B /* MyUnScrollingWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2B2746227CA9270087A11B /* MyUnScrollingWebView.swift */; };
 		CA2B2749227CB0030087A11B /* ContentWebViewTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA2B2748227CB0030087A11B /* ContentWebViewTableCell.swift */; };
@@ -86,6 +87,7 @@
 		CA048B79226F0ECF00A33840 /* TabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarVC.swift; sourceTree = "<group>"; };
 		CA048B7C226F66E800A33840 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		CA138FE9227F85A8002473F5 /* Converters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Converters.swift; sourceTree = "<group>"; };
+		CA2483472292912300CCCA6B /* StaticHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticHelpers.swift; sourceTree = "<group>"; };
 		CA2B2743227AFF640087A11B /* TagModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagModel.swift; sourceTree = "<group>"; };
 		CA2B2746227CA9270087A11B /* MyUnScrollingWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyUnScrollingWebView.swift; sourceTree = "<group>"; };
 		CA2B2748227CB0030087A11B /* ContentWebViewTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentWebViewTableCell.swift; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 				CA0366EB22745C32009BAD5E /* LanguageHelper.swift */,
 				CAA734BB227D98DB0091925F /* MyProtocols.swift */,
 				CACA0A142282E4A6003C5920 /* ViewExtension.swift */,
+				CA2483472292912300CCCA6B /* StaticHelpers.swift */,
 			);
 			path = additional;
 			sourceTree = "<group>";
@@ -515,6 +518,7 @@
 				CA3150A62273B85F005BB7E2 /* AudioNewsCell.swift in Sources */,
 				CAD7313A2289914E00EC88FA /* ContentImageTableCell.swift in Sources */,
 				CA471346226611C50052C860 /* AppDelegate.swift in Sources */,
+				CA2483482292912300CCCA6B /* StaticHelpers.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

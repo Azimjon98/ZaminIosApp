@@ -10,13 +10,16 @@ import UIKit
 import WebKit
 
 protocol ContentLoadingDelegate{
-    func contentDidLoad()
+    func contentDidLoad(_ height: CGFloat)
     func contentAction(linkUrl url: String)
 }
 
 class ContentWebViewTableCell: UITableViewCell, WKNavigationDelegate, WKUIDelegate{
     @IBOutlet weak var webView : MyUnScrollingWebView!
     @IBOutlet weak var constrainWebView : NSLayoutConstraint!
+    
+    var heightStack: [CGFloat] = []
+    
     
     var contentUrl: String!{
         didSet{
@@ -40,24 +43,51 @@ class ContentWebViewTableCell: UITableViewCell, WKNavigationDelegate, WKUIDelega
         
     }
     
-    //content finish loading web content
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        print("Finish")
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            let currentHeight = self.constrainWebView.constant
-            if currentHeight != webView.scrollView.contentSize.height{
+    func updateWebView(_ increasing: Bool){
+        
+        if increasing{
+            self.webView.evaluateJavaScript("document.readyState", completionHandler: { (complete, error) in
+                if complete != nil {
+                    self.webView.evaluateJavaScript("document.body.scrollHeight", completionHandler: { (height, error) in
+                        
+                        self.constrainWebView.constant = height as? CGFloat ?? 0.0
+                        self.heightStack.append(height as? CGFloat ?? 0.0)
+                        print("WebViewIncrease: \(self.constrainWebView.constant)   \(self.webView.scrollView.contentSize.height)")
+                        self.delegate.contentDidLoad(self.constrainWebView.constant)
+                    })
+                }
                 
-                webView.scrollView.maximumZoomScale = 1.0
-                
-                self.constrainWebView.constant = webView.scrollView.contentSize.height
-
-                self.delegate.contentDidLoad()
+            })
+        }
+        
+        else{
+            _ = self.heightStack.popLast()
+            self.constrainWebView.constant =  self.heightStack.last ?? 0.0
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                print("WebViewDecrease: \(self.constrainWebView.constant)   \(self.webView.scrollView.contentSize.height)")
+                self.delegate.contentDidLoad(self.constrainWebView.constant)
             }
             
         }
+    }
+    
+    //content finish loading web content
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print("Finish")
+      
+        self.webView.evaluateJavaScript("document.readyState", completionHandler: { (complete, error) in
+            if complete != nil {
+                self.webView.evaluateJavaScript("document.body.scrollHeight", completionHandler: { (height, error) in
+                    self.constrainWebView.constant = height as? CGFloat ?? 0.0
+                    self.heightStack.append(height as? CGFloat ?? 0.0)
+                    self.delegate.contentDidLoad(self.constrainWebView.constant)
+                })
+            }
+
+        })
 
     }
+    
 
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let _ = navigationAction.request.url {

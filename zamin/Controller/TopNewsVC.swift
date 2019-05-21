@@ -16,6 +16,7 @@ class TopNewsVC: UITableViewController{
     //TODO: Variables here
     var items : [SimpleNewsModel] = [SimpleNewsModel]()
     var allIds : [String]?
+    var estimatedHeights: [IndexPath: CGFloat] = [:]
     
     let realm = try! Realm()
     
@@ -25,13 +26,18 @@ class TopNewsVC: UITableViewController{
     var lastLanguage: String = {
         UserDefaults.getLocale()
     }()
+    var makingRequest: Bool = false
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //TODO: Register nib file
+        
+        
         tableView.register(UINib(nibName: "MediumNewsCell", bundle: nil), forCellReuseIdentifier: "mediumNewsCell")
 
         getTopNews(true)
+        
     }
     
     @IBAction func refreshWindow(_ sender: UIRefreshControl) {
@@ -41,6 +47,7 @@ class TopNewsVC: UITableViewController{
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.delegate = self
         allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
         
         if UserDefaults.getLocale() != lastLanguage{
@@ -91,6 +98,7 @@ extension TopNewsVC{
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        estimatedHeights[indexPath] = cell.frame.size.height
         if let cell = cell as? MediumNewsCell{
             if allIds?.contains(cell.model.newsId) ?? false{
                 cell.bookItem()
@@ -98,20 +106,16 @@ extension TopNewsVC{
                 cell.unbookItem()
             }
         }
-        
-        if indexPath.row == items.count - 1{
-            tableView.isScrollEnabled = false
-            tableView.isScrollEnabled = true
-            
-            self.getTopNews()
-        }
     }
-    
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         selectedIndex = indexPath.row
         performSegue(withIdentifier: "goToContent", sender: self)
+    }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return estimatedHeights[indexPath] ?? tableView.estimatedRowHeight
     }
 }
 
@@ -119,6 +123,11 @@ extension TopNewsVC{
     
     //TODO: Networking
     func getTopNews(_ fromBegin: Bool = false){
+        if  makingRequest{
+            return
+        }
+        makingRequest = true
+
         if  fromBegin{
             self.tableView.removeBackView()
             offset = 1
@@ -174,6 +183,7 @@ extension TopNewsVC{
         let addingItems = SimpleNewsModel.parse(json: json) ?? [SimpleNewsModel]()
         self.items.append(contentsOf: addingItems)
         
+        makingRequest = false
         if(addingItems.count != 0){
             self.tableView.reloadData()
         }
@@ -215,6 +225,43 @@ extension TopNewsVC{
     
     @objc func refreshButtonClicked(sender: UIButton) {
         getTopNews(true)
+    }
+    
+}
+
+
+
+extension TopNewsVC{
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffset = tableView.contentOffset.y
+        let maxOffset = tableView.contentSize.height
+        let frameSize = tableView.frame.size.height
+        
+        if maxOffset - frameSize - currentOffset <= 0, !makingRequest{
+            tableView.addLoadingFooter()
+            getTopNews()
+        }
+        
+        
+    }
+    
+}
+
+extension TopNewsVC: UITabBarControllerDelegate{
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        let tabBarIndex = tabBarController.selectedIndex
+        
+        
+        if tabBarIndex == 1, MyTabBarIndex.tabBarIndex == tabBarIndex, !self.tableView.visibleCells.isEmpty {
+            
+            DispatchQueue.main.async {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            }
+            
+        }
+        MyTabBarIndex.tabBarIndex = tabBarIndex
     }
     
 }

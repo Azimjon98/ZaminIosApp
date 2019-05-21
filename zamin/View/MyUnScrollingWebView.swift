@@ -17,11 +17,10 @@ class MyUnScrollingWebView : WKWebView, UIScrollViewDelegate{
         self.scrollView.isScrollEnabled = false
         self.scrollView.isPagingEnabled = false
         self.scrollView.delegate = self
-        self.scrollView.widthAnchor.constraint(equalToConstant: self.frame.width)
-        
-        self.scrollView.minimumZoomScale = 1.0
-    }
+        }
     
+    
+   
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
         scrollView.pinchGestureRecognizer?.isEnabled = false
     }

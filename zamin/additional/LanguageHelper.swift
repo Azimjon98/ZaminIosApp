@@ -99,7 +99,10 @@ final class LanguageHelper {
         case text_registration
         case text_no_item
         case text_refresh
-        
+        case text_reset_alert_title
+        case text_reset_alert_messege
+        case text_yes
+        case text_login_alert_disabled
     }
     
     
@@ -153,7 +156,7 @@ extension LanguageHelper{
             case StringsId.text_select_language: return "Tilni tanlash"
             case StringsId.language: return "O\'zbek"
             case StringsId.text_results: return "qidiruv natijalari"
-            case StringsId.title_select_categories: return "Kategoriyalarni tanlang"
+            case StringsId.title_select_categories: return "Kategoriyalar"
             case StringsId.today: return "Bugun"
             case StringsId.text_share: return "Yangilikni ulashish"
             case StringsId.text_no_connection: return "Tilni o\'zgartirish uchun internetga ulaning"
@@ -163,7 +166,10 @@ extension LanguageHelper{
             case StringsId.text_registration: return "Ro\'yxatdan o\'tish"
             case StringsId.text_no_item: return "Yangiliklar topilmadi"
             case StringsId.text_refresh: return "Takrorlash"
-                
+            case .text_reset_alert_title: return "Barcha o'zgarishlarni bekor qilmoqchimisiz"
+            case .text_reset_alert_messege: return "ortga qaytishning iloji bo'lmaydi"
+            case .text_yes: return "Ha"
+            case .text_login_alert_disabled: return "Ro'yxatdan o'tishning iloji yo'q"
             }
             
         }
@@ -206,7 +212,7 @@ extension LanguageHelper{
             case StringsId.text_select_language: return "Тилни танлаш"
             case StringsId.language: return "Ўзбек"
             case StringsId.text_results: return "қидирув натижалари"
-            case StringsId.title_select_categories: return "Категорияларни танланг"
+            case StringsId.title_select_categories: return "Категориялар"
             case StringsId.today: return "Бугун"
             case StringsId.text_no_connection: return "Tilni o\'zgartirish uchun internetga ulaning"
             case StringsId.check_the_connection: return "Internetga ulanganingizni tekshirib ko\'ring"
@@ -216,7 +222,10 @@ extension LanguageHelper{
             case StringsId.text_registration: return "Рўйхатдан ўтиш"
             case StringsId.text_no_item: return "Янгиликлар топилмади"
             case StringsId.text_refresh: return "Такрорлаш"
-                
+            case .text_reset_alert_title: return "Барча ўзгаришларни бекор қилмоқчимисиз"
+            case .text_reset_alert_messege: return "ортга қайтишнинг иложи бўлмайди"
+            case .text_yes: return "Ҳа"
+            case .text_login_alert_disabled: return "Рўйхатдан ўтишнинг иложи йўқ"
             }
             
         }

@@ -27,11 +27,14 @@ class FavouriteNewsVC: UIViewController{
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        
         tableView.register(UINib(nibName: "FavouriteNewsCell", bundle: nil), forCellReuseIdentifier: "favouriteNewsCell")
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.delegate = self
         allIds = realm.objects(EntityFavouriteNewsModel.self).map { $0.newsId }
         loadFavourites()
         changeLanguage()
@@ -186,6 +189,25 @@ extension FavouriteNewsVC : MyWishListDelegate{
         }catch{
             print("Error(TopNewsVC) adding to realm")
         }
+    }
+    
+}
+
+
+extension FavouriteNewsVC: UITabBarControllerDelegate{
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        let tabBarIndex = tabBarController.selectedIndex
+        
+        if tabBarIndex == 2, MyTabBarIndex.tabBarIndex == tabBarIndex, !self.tableView.visibleCells.isEmpty {
+            
+            DispatchQueue.main.async {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+//                tableView.row
+            }
+            
+        }
+        MyTabBarIndex.tabBarIndex = tabBarIndex
     }
     
 }

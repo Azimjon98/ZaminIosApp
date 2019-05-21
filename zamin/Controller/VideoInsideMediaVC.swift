@@ -22,6 +22,7 @@ class VideoInsideMediaVC: UITableViewController, IndicatorInfoProvider {
     
     var allIds : [String]?
     var videoNews : [SimpleNewsModel] = [SimpleNewsModel]()
+    var estimatedHeights: [IndexPath: CGFloat] = [:]
     
     var offset : Int = 1
     var limit: String = "10"
@@ -29,6 +30,7 @@ class VideoInsideMediaVC: UITableViewController, IndicatorInfoProvider {
     var lastLanguage: String = {
         UserDefaults.getLocale()
     }()
+    var makingRequest: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,6 +43,7 @@ class VideoInsideMediaVC: UITableViewController, IndicatorInfoProvider {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        MyTabBarIndex.mediaLastIndex = 0
         allIds = realm.objects(EntityFavouriteNewsModel.self).map { return $0.newsId }
         changeLanguage()
         
@@ -110,7 +113,7 @@ extension VideoInsideMediaVC{
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        
+        estimatedHeights[indexPath] = cell.frame.size.height
         if let cell = cell as? VideoNewsCell{
             if allIds?.contains(cell.model.newsId) ?? false{
                 cell.bookItem()
@@ -129,6 +132,10 @@ extension VideoInsideMediaVC{
         selectedIndex = indexPath.row
         performSegue(withIdentifier: "goToContent", sender: self)
     }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return estimatedHeights[indexPath] ?? tableView.estimatedRowHeight
+    }
 }
 
 
@@ -136,6 +143,11 @@ extension VideoInsideMediaVC{
 extension VideoInsideMediaVC{
    
     func getVideoNews(_ fromBegin: Bool = false){
+        if  makingRequest{
+            return
+        }
+        makingRequest = true
+        
         if  fromBegin{
             offset = 1
             self.videoNews.removeAll()
@@ -150,6 +162,7 @@ extension VideoInsideMediaVC{
         req.responseJSON {
             response in
             SVProgressHUD.dismiss()
+            self.makingRequest = false
             
             if response.result.isSuccess{
                 let data : JSON = JSON(response.result.value!)
@@ -168,6 +181,7 @@ extension VideoInsideMediaVC{
                     self.parseNews(cachedJson)
                     self.offset += 1
                 }else if self.offset == 1{
+                    
                     self.titleView.isHidden = true
                     self.tableView.setBigEmptyView()
                     if let button = self.tableView.backgroundView?.viewWithTag(1010102) as? UIButton{
@@ -187,7 +201,9 @@ extension VideoInsideMediaVC{
         
         self.titleView.isHidden = false
         self.tableView.removeBackView()
-        self.tableView.reloadData()
+        if(videoNews.count != 0){
+            self.tableView.reloadData()
+        }
     }
     
 }
@@ -237,6 +253,38 @@ extension VideoInsideMediaVC{
     
     @objc func refreshButtonClicked(sender: UIButton) {
         getVideoNews(true)
+    }
+    
+}
+
+
+extension VideoInsideMediaVC{
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffset = tableView.contentOffset.y
+        let maxOffset = tableView.contentSize.height
+        let frameSize = tableView.frame.size.height
+        
+        if maxOffset - frameSize - currentOffset <= 0, !makingRequest{
+            tableView.addLoadingFooter()
+            getVideoNews()
+        }
+        
+        
+    }
+    
+}
+
+
+extension VideoInsideMediaVC: UITabBarControllerDelegate{
+    
+    func scrollToTop() {
+        if !self.tableView.visibleCells.isEmpty {
+            DispatchQueue.main.async {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            }
+        }
+        
     }
     
 }

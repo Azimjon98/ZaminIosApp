@@ -22,6 +22,7 @@ class GalleryInsideMediaVC: UITableViewController, IndicatorInfoProvider {
     
     var allIds : [String]?
     var galleryNews : [SimpleNewsModel] = [SimpleNewsModel]()
+    var estimatedHeights: [IndexPath: CGFloat] = [:]
     
     var offset : Int = 1
     var limit: String = "10"
@@ -29,6 +30,7 @@ class GalleryInsideMediaVC: UITableViewController, IndicatorInfoProvider {
     var lastLocale: String = {
         UserDefaults.getLocale()
     }()
+    var makingRequest: Bool = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +42,7 @@ class GalleryInsideMediaVC: UITableViewController, IndicatorInfoProvider {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        MyTabBarIndex.mediaLastIndex = 1
         allIds = realm.objects(EntityFavouriteNewsModel.self).map { return $0.newsId }
         changeLanguage()
         
@@ -109,6 +112,7 @@ extension GalleryInsideMediaVC{
     }
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        estimatedHeights[indexPath] = cell.frame.size.height
         if let cell = cell as? GalleryNewsCell{
             if allIds?.contains(cell.model.newsId) ?? false{
                 cell.bookItem()
@@ -127,6 +131,10 @@ extension GalleryInsideMediaVC{
         selectedIndex = indexPath.row
         performSegue(withIdentifier: "goToContent", sender: self)
     }
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return estimatedHeights[indexPath] ?? tableView.estimatedRowHeight
+    }
 }
 
 
@@ -138,6 +146,11 @@ extension GalleryInsideMediaVC{
     //MARK: Networking
     
     func getGalleryNews(_ fromBegin: Bool = false){
+        if  makingRequest{
+            return
+        }
+        makingRequest = true
+        
         if  fromBegin{
             offset = 1
             self.galleryNews.removeAll()
@@ -153,6 +166,7 @@ extension GalleryInsideMediaVC{
         req.responseJSON {
             response in
             SVProgressHUD.dismiss()
+            self.makingRequest = false
             
             if response.result.isSuccess{
                 let data : JSON = JSON(response.result.value!)
@@ -190,7 +204,9 @@ extension GalleryInsideMediaVC{
         
         self.titleView.isHidden = false
         self.tableView.removeBackView()
-        self.tableView.reloadData()
+        if(galleryNews.count != 0){
+            self.tableView.reloadData()
+        }
     }
     
 }
@@ -241,6 +257,37 @@ extension GalleryInsideMediaVC{
     
     @objc func refreshButtonClicked(sender: UIButton) {
         getGalleryNews(true)
+    }
+    
+}
+
+extension GalleryInsideMediaVC{
+    
+    override func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let currentOffset = tableView.contentOffset.y
+        let maxOffset = tableView.contentSize.height
+        let frameSize = tableView.frame.size.height
+        
+        if maxOffset - frameSize - currentOffset <= 0, !makingRequest{
+            tableView.addLoadingFooter()
+            getGalleryNews()
+        }
+        
+        
+    }
+    
+}
+
+
+extension GalleryInsideMediaVC: UITabBarControllerDelegate{
+    
+    func scrollToTop() {
+        if !self.tableView.visibleCells.isEmpty {
+            DispatchQueue.main.async {
+                self.tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            }
+        }
+        
     }
     
 }
