@@ -13,6 +13,7 @@ import RealmSwift
 import SVProgressHUD
 import WebKit
 import TagCellLayout
+import SDWebImage
 
 class ContentVC: UIViewController {
     @IBOutlet weak var tableView: UITableView!
@@ -85,10 +86,11 @@ class ContentVC: UIViewController {
     var limit: String = "10"
     var selectedIndex = -1
     var contentLoaded: Bool = false
+    var imageLoaded: Bool = false
+    var isFirstFromWeb: Bool = false
     var myContentUrl: String = ""
     var makingRequest: Bool = false
     var fontChangeVisible: Bool = false
-    var currentFont: Int = 100
     var offsetBeforeFontChange: CGPoint!
     
     var allIds : [String]?
@@ -184,7 +186,6 @@ class ContentVC: UIViewController {
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        print("tapped")
         if fontChangeVisible{
             changeFontView.removeFromSuperview()
             tableView.isUserInteractionEnabled = true
@@ -205,12 +206,12 @@ class ContentVC: UIViewController {
     }
     
     @IBAction func fontDecreasePressed(_ sender: Any) {
-        if  currentFont > 100{
+        if  UserDefaults.getFontSize() > 100{
             offsetBeforeFontChange = tableView.contentOffset
-            currentFont = currentFont - 10
+            UserDefaults.setFontSize(UserDefaults.getFontSize() - 10)
             if let cell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? ContentWebViewTableCell{
                 
-                cell.webView.evaluateJavaScript("document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '\(currentFont)%'") { (complete, error) in
+                cell.webView.evaluateJavaScript("document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '\(UserDefaults.getFontSize())%'") { (complete, error) in
                     cell.updateWebView(false)
                 }
                 
@@ -222,12 +223,12 @@ class ContentVC: UIViewController {
     
     
     @IBAction func fontIncreasePressed(_ sender: Any) {
-        if currentFont < 180{
+        if UserDefaults.getFontSize() < 180{
             offsetBeforeFontChange = tableView.contentOffset
-            currentFont = currentFont + 10
+            UserDefaults.setFontSize(UserDefaults.getFontSize() + 10)
             if let cell = tableView.cellForRow(at: IndexPath(row: 2, section: 0)) as? ContentWebViewTableCell{
                 
-                cell.webView.evaluateJavaScript("document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '\(currentFont)%'") { (complete, error) in
+                cell.webView.evaluateJavaScript("document.getElementsByTagName('body')[0].style.webkitTextSizeAdjust= '\(UserDefaults.getFontSize())%'") { (complete, error) in
                     cell.updateWebView(true)
                 }
                 
@@ -264,7 +265,16 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
             
         else if indexPath.row == 1{
             if let cell = tableView.dequeueReusableCell(withIdentifier: "contentImageTableCell", for: indexPath) as? ContentImageTableCell{
-                cell.imageUrl = contentModel.imageUrl
+                cell.baseImageView?.sd_setImage(with: URL(string:  contentModel.imageUrl), completed: { (image, error, cacheType, imageURL) in
+                    
+                    if !self.imageLoaded {
+                        self.imageLoaded = true
+                        if self.isFirstFromWeb{
+                            self.contentDidLoad(self.estimatedHeights[IndexPath(row: 2, section: 0)]!)
+                        }
+                    }
+                })
+//                cell.imageUrl = contentModel.imageUrl
                 cell.selectionStyle = .none
                 
                 return cell
@@ -322,7 +332,6 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        print("willDisplay: \(indexPath.row)")
         estimatedHeights[indexPath] = cell.frame.size.height
         if let cell = cell as? MediumNewsCell{
             if allIds?.contains(cell.model.newsId) ?? false{
@@ -370,7 +379,6 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        print("estimatedHeight: \(indexPath.row)   \(estimatedHeights[indexPath] ?? tableView.estimatedRowHeight)")
         return estimatedHeights[indexPath] ?? tableView.estimatedRowHeight
     }
     
@@ -379,12 +387,21 @@ extension ContentVC : UITableViewDelegate, UITableViewDataSource{
 extension ContentVC: ContentLoadingDelegate{
     
     func contentDidLoad(_ height: CGFloat) {
+        print("estimatedHeight: \(height)")
+        estimatedHeights[IndexPath(row: 2, section: 0)] = height
+        
+        isFirstFromWeb = true
+        if !imageLoaded{
+            return
+        }
+        
         if !contentLoaded{
             contentLoaded = true
             self.stopTopProgress()
             self.tableView.isScrollEnabled = true
             
             tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .automatic)
+            
             //enable font change button in navigation bar
             self.navigationItem.rightBarButtonItems?.append(textAttrButton)
             self.navigationItem.rightBarButtonItems![2].target = self
@@ -395,11 +412,10 @@ extension ContentVC: ContentLoadingDelegate{
 //            self.tableView.setContentOffset(offsetBeforeFontChange, animated: false)
         }
         
-        estimatedHeights[IndexPath(row: 2, section: 0)] = height
+        
     }
     
     func contentAction(linkUrl url: String) {
-        print("inContent: \(url)")
         myContentUrl = url
         performSegue(withIdentifier: "goToWebView", sender: self)
     }

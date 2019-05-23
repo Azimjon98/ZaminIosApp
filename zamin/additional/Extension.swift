@@ -141,6 +141,18 @@ extension UserDefaults{
     static func setNotificationEnabled(_ state: Bool) {
         UserDefaults.standard.set(state, forKey: Constants.KEY_NOTIFICATION_ENABLED)
     }
+    
+    static func getFontSize() -> Int {
+        if let fontSize = UserDefaults.standard.object(forKey: Constants.KEY_FONT_SIZE) as? Int{
+            return fontSize
+        }
+        
+        return 100
+    }
+    
+    static func setFontSize(_ fontSize: Int) {
+        UserDefaults.standard.set(fontSize, forKey: Constants.KEY_FONT_SIZE)
+    }
 }
 
 

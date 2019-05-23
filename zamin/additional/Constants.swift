@@ -25,4 +25,5 @@ class Constants {
     //MARK: - KEYS
     public static let KEY_LANG : String = "key_lang"
     public static let KEY_NOTIFICATION_ENABLED : String = "key_notification_enabled"
+    public static let KEY_FONT_SIZE : String = "key_font_size"
 }

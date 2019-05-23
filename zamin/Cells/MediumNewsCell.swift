@@ -47,8 +47,6 @@ class MediumNewsCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-        print("awakeFromNib")
     }
     
     @objc func bookmarkPressed(sender: UIButton!){
